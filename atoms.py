@@ -22,14 +22,14 @@ class Atom:
         predictor = dlib.shape_predictor('models/shape_predictor_68_face_landmarks.dat')
         for (i, rect) in enumerate(self.rects):
             self.shape = predictor(self.gray, rect)
-            self.coords = self.getEyes()
+            shape = self.getEyes()
 
-            for (x,y) in self.coords:
+            for (x,y) in shape:
                 cv2.circle(self.img, (x, y), 2, (255, 0, 0), -1)
-                if (x, y) in self.leftEye:
-                    cv2.circle(self.img, (x, y), 2, (255, 0, 0), -1)
-                if (x, y) in self.rightEye:
-                    cv2.circle(self.img, (x, y), 2, (0, 0, 255), -1)
+                # if (x, y) in self.leftEye:
+                #     cv2.circle(self.img, (x, y), 2, (255, 0, 0), -1)
+                # if (x, y) in self.rightEye:
+                #     cv2.circle(self.img, (x, y), 2, (0, 0, 255), -1)
 
     def getEyes(self):
 
@@ -41,30 +41,31 @@ class Atom:
         coords = np.zeros((68, 2), dtype=int)
         for i in range(0, 68):
             coords[i] = (self.shape.part(i).x, self.shape.part(i).y)
-            if i in leftEye:
-                lEye.append((self.shape.part(i).x, self.shape.part(i).y))
-            if i in rightEye:
-                rEye.append((self.shape.part(i).x, self.shape.part(i).y))
+            # if i in leftEye:
+            #     lEye.append((self.shape.part(i).x, self.shape.part(i).y))
+            # if i in rightEye:
+            #     rEye.append((self.shape.part(i).x, self.shape.part(i).y))
         
         #print(coords)
-        
+        self.leftEyeCords =  {'x1': coords[36][0], 'x2': coords[39][0], 'y1':coords[38][1], 'y2': coords[41][1]}
+        self.rightEyeCords = {'x1': coords[42][0], 'x2': coords[45][0], 'y1':coords[43][1], 'y2': coords[46][1]}
         self.coords = coords
-        self.leftEye = lEye
-        self.rightEye = rEye
+        # self.leftEye = lEye
+        # self.rightEye = rEye
         return coords
 
     def processEyes(self):
         # cropped = img[start_row:end_row, start_col:end_col]
         img = self.img
-        x1=self.shape.part(36).x
-        x2=self.shape.part(39).x
-        y1=self.shape.part(37).y
-        y2=self.shape.part(40).y
         #crop_img = img[y:y+h, x:x+w]
-        #self.leftEyeImg = img[self.leftEyeCords['y1']: self.leftEyeCords['y2']+1, self.leftEyeCords['x1']:self.leftEyeCords['x2']+1].copy()
-        self.leftEyeImg = img[y1-10:y2+10, x1-10:x2+10].copy()
+        self.leftEyeImg = img[self.leftEyeCords['y1']-10: self.leftEyeCords['y2']+10, 
+                                self.leftEyeCords['x1']-10:self.leftEyeCords['x2']+10].copy()
+        
+        self.rightEyeImg = img[self.rightEyeCords['y1']-10: self.rightEyeCords['y2']+10, 
+                                self.rightEyeCords['x1']-10:self.rightEyeCords['x2']+10].copy()
 
-        pass 
+
+         
 
 if __name__ == "__main__":
     # face = dlibCords('/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png')
@@ -74,10 +75,13 @@ if __name__ == "__main__":
     # cv2.destroyAllWindows()
 
 
-    atomOne = Atom('Joy','/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png' )
+    atomOne = Atom('Joy','/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/cas.jpg' )
     atomOne.proccessImg()
     atomOne.processEyes()
-   
     cv2.imshow('bork', atomOne.leftEyeImg)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+   
+    cv2.imshow('bork', atomOne.rightEyeImg)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
