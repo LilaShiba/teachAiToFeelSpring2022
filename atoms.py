@@ -49,6 +49,7 @@ class Atom:
         #print(coords)
         self.leftEyeCords =  {'x1': coords[36][0], 'x2': coords[39][0], 'y1':coords[38][1], 'y2': coords[41][1]}
         self.rightEyeCords = {'x1': coords[42][0], 'x2': coords[45][0], 'y1':coords[43][1], 'y2': coords[46][1]}
+       
         self.coords = coords
         # self.leftEye = lEye
         # self.rightEye = rEye
@@ -64,7 +65,8 @@ class Atom:
         self.rightEyeImg = img[self.rightEyeCords['y1']-10: self.rightEyeCords['y2']+10, 
                                 self.rightEyeCords['x1']-10:self.rightEyeCords['x2']+10].copy()
 
-
+        self.leftEyeArray  =  np.array(self.leftEyeImg.copy())
+        self.rightEyeArray =  np.array(self.rightEyeImg.copy())
          
 
 if __name__ == "__main__":
@@ -81,7 +83,7 @@ if __name__ == "__main__":
     cv2.imshow('bork', atomOne.leftEyeImg)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-   
+    print(atomOne.rightEyeArray)
     cv2.imshow('bork', atomOne.rightEyeImg)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
