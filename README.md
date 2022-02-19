@@ -1,6 +1,6 @@
 # teachAiToFeelSpring2022
 
-## CRUM Research for [G-tech OMSCS Intro to Cognitive Science](https://omscs.gatech.edu/cs-6795-introduction-cognitive-science)
+## CRUM Research for [G-Tech OMSCS Intro to Cognitive Science](https://omscs.gatech.edu/cs-6795-introduction-cognitive-science)
 
 ### Emotion detection through eye data
 
