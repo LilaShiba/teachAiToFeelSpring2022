@@ -15,4 +15,4 @@
 ---
 # 68 face landmark detection
 
-![68 face landmark detection](https://s3.ap-south-1.amazonaws.com/s3.studytonight.com/curious/uploads/pictures/1592469192-74364.png)
+<img src="https://s3.ap-south-1.amazonaws.com/s3.studytonight.com/curious/uploads/pictures/1592469192-74364.png" width="100" height="100">
