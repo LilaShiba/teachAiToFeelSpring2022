@@ -69,6 +69,7 @@ class Atom:
         # cropped = img[start_row:end_row, start_col:end_col]
         img = self.img
         #crop_img = img[y:y+h, x:x+w]
+        # We only want data with two eyes for basic training
         if self.leftEyeCords and self.rightEyeCords:
             self.leftEyeImg = img[self.leftEyeCords['y1']-4: self.leftEyeCords['y2']+4, 
                                     self.leftEyeCords['x1']-4:self.leftEyeCords['x2']+4].copy()
@@ -92,27 +93,26 @@ if __name__ == "__main__":
 
     for label in os.listdir('images/train'):
         count = 0
-        if label != 'disgust':
-            for img in os.listdir('images/train/'+label):
-                deltaPath = 'images/train/'+label+'/'+img 
-                atomOne = Atom(label, deltaPath)
-                atomOne.proccessImg()
-                atomOne.processEyes()
-                #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
-                if len(atomOne.rightEyeImg) > 1 and len(atomOne.leftEyeImg) > 1:
-                    os.makedirs('eyeData/'+label+'/'+str(count))
-                    newFilePathL  = 'eyeData/'+label+'/'+str(count)+'/'+'L'+img
-                    newFilePathR  = 'eyeData/'+label+'/'+str(count)+'/'+'R'+img
-                    # if not os.path.exists(newFilePathL):
-                    #     os.makedirs(newFilePathL)
-                    #     os.makedirs(newFilePathR)
-                    count += 1
-                    try:
-                        cv2.imwrite(newFilePathL, atomOne.leftEyeImg)
-                        cv2.imwrite(newFilePathR, atomOne.rightEyeImg)
-                    
-                    except cv2.error as e:
-                        print('error dang')
+        for img in os.listdir('images/train/'+label):
+            deltaPath = 'images/train/'+label+'/'+img 
+            atomOne = Atom(label, deltaPath)
+            atomOne.proccessImg()
+            atomOne.processEyes()
+            #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
+            if len(atomOne.rightEyeImg) > 1 and len(atomOne.leftEyeImg) > 1:
+                os.makedirs('eyeData/'+label+'/'+str(count))
+                newFilePathL  = 'eyeData/'+label+'/'+str(count)+'/'+'L'+img
+                newFilePathR  = 'eyeData/'+label+'/'+str(count)+'/'+'R'+img
+                # if not os.path.exists(newFilePathL):
+                #     os.makedirs(newFilePathL)
+                #     os.makedirs(newFilePathR)
+                count += 1
+                try:
+                    cv2.imwrite(newFilePathL, atomOne.leftEyeImg)
+                    cv2.imwrite(newFilePathR, atomOne.rightEyeImg)
+                   
+                except cv2.error as e:
+                    print('error dang')
     
 
 
