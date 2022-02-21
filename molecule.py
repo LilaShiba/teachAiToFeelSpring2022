@@ -8,13 +8,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 emotionVibes = {
-                'fear':1,
-                'anger':2,
-                'disgust':3,
-                'joy': 4,
-                'surprise': 5,
-                'neutral': 6,
-                'sadness': 7,
+                'fear':0,
+                'anger':1,
+                'disgust':2,
+                'joy': 3,
+                'surprise': 4,
+                'neutral': 5,
+                'sadness': 6,
                 }
 
 class Molecule:
@@ -33,31 +33,30 @@ class Molecule:
             self.leftEye, self.rightEye = cv2.imread(filePath+'/'+left), cv2.imread(filePath+'/'+right) 
             self.leftEyeGrey  = cv2.cvtColor(self.leftEye, cv2.COLOR_BGR2GRAY)
             self.rightEyeGrey = cv2.cvtColor(self.rightEye, cv2.COLOR_BGR2GRAY)
-            # self.leftArray, self.rightArray = np.array(self.leftEyeGrey), np.array(self.rightEyeGrey)
-            
-            self.leftArray = self.blurToGaus(self.leftEyeGrey)
-            self.rightArray = self.blurToGaus(self.rightEyeGrey)
+            self.leftArray, self.rightArray = np.array(self.leftEyeGrey), np.array(self.rightEyeGrey)
+            # self.leftArray = self.blurToGaus(self.leftEyeGrey)
+            # self.rightArray = self.blurToGaus(self.rightEyeGrey)
             self.getDpr()
            
            
 
-    def getDpr(self):
+    def getDpr(self, threshold=50):
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
         # Left EYE
-        left[left < 51] = 1
+        left[left < threshold] = 1
         left[left > 1]  = 0
         dpcLeft = np.count_nonzero(left) 
-        self.dprLeftEye = (dpcLeft / 480 )
-        # RIGHT EYE
-        right[right < 51] = 1
-        right[right > 1]  = 0
-        dpcRight = np.count_nonzero(right) 
+        zero_count = np.count_nonzero(left==0)#left[np.where(left == 0)]
+        self.dprLeftEye = (dpcLeft / (zero_count+dpcLeft) )
         
-        self.dprRightEye = (dpcRight / 480 )
-
-        # print('ldpr', self.dprLeftEye)
-        # print('rdpr', self.dprRightEye)
+        # RIGHT EYE
+        right[right < threshold] = 1
+        right[right > 1]  = 0
+        zero_count = np.count_nonzero(right==0)#right[np.where(right == 0)]
+        dpcRight = np.count_nonzero(right) 
+        self.dprRightEye = (dpcRight / (dpcRight + zero_count) )
+        
         self.x = self.dprRightEye
         self.y = self.dprLeftEye
 
@@ -91,8 +90,8 @@ if __name__ == '__main__':
             if len(deltaPath) > 1:
                 delta = Molecule(label, deltaPath)
                 if delta.x and delta.y:
-                    x = round(delta.x,3)
-                    y = round(delta.y,3)
+                    x = round(delta.x,2)
+                    y = round(delta.y,2)
                     graph[ (x,y) ].append(delta.label)
                     cords[ (x,y) ] = delta.vibe
     
@@ -101,17 +100,27 @@ if __name__ == '__main__':
 
                 #cols x,y,label
     print('processing dpr done')
-    res = pd.DataFrame(cords.items())
-    # print(res)
-    # res = res.rename(columns={0: "cords", 1:'emotion'})
-    # res['x'], res['y'] = zip(*res["cords"])
-    # print('scatter')
+    res = pd.DataFrame(graph.items())
+    print(res)
+    res = res.rename(columns={0: "cords", 1:'emotion'})
+    res['x'], res['y'] = zip(*res["cords"])
+    
+    # plt.bar(res.keys(), res.values(), 1, color='g')
+    print(res)
+
+
+    plt.show()
+        
+
+
+
+
     # sns.scatterplot(data=res, x='x', y='y')
     # plt.show()
     
-    res = res.rename(columns={0: "cords", 1:'emotion'})
-    res['x'], res['y'] = zip(*res["cords"])
-    print('scatter')
-    print(res)
-    sns.scatterplot(data=res, x='x', y='y', hue='emotion')
-    plt.show()
+    # res = res.rename(columns={0: "cords", 1:'emotion'})
+    # res['x'], res['y'] = zip(*res["cords"])
+    # print('scatter')
+    # print(res)
+    # sns.scatterplot(data=res, x='x', y='y', hue='emotion')
+    # plt.show()
