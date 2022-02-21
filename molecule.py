@@ -40,25 +40,25 @@ class Molecule:
            
            
 
-    def getDpr(self, threshold=50):
+    def getDpr(self, threshold=75):
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
         # Left EYE
         left[left < threshold] = 1
         left[left > 1]  = 0
         dpcLeft = np.count_nonzero(left) 
-        zero_count = np.count_nonzero(left==0)#left[np.where(left == 0)]
-        self.dprLeftEye = (dpcLeft / (zero_count+dpcLeft) )
+        zero_countL = np.count_nonzero(left==0)#left[np.where(left == 0)]
+        self.dprLeftEye = (dpcLeft / (zero_countL+dpcLeft) )
         
         # RIGHT EYE
         right[right < threshold] = 1
         right[right > 1]  = 0
-        zero_count = np.count_nonzero(right==0)#right[np.where(right == 0)]
+        zero_countR = np.count_nonzero(right==0)#right[np.where(right == 0)]
         dpcRight = np.count_nonzero(right) 
-        self.dprRightEye = (dpcRight / (dpcRight + zero_count) )
+        self.dprRightEye = (dpcRight / (dpcRight + zero_countR) )
         
-        self.x = self.dprRightEye
-        self.y = self.dprLeftEye
+        self.x = zero_countL#self.dprRightEye
+        self.y = zero_countR #self.dprLeftEye
 
     def blurToGaus(self, imgToBlur, kernal=(0,0)):
         # resource: https://docs.opencv.org/3.4/d4/d13/tutorial_py_filtering.html
@@ -101,21 +101,24 @@ if __name__ == '__main__':
                 #cols x,y,label
     print('processing dpr done')
     res = pd.DataFrame(graph.items())
-    print(res)
+    #print(res)
     res = res.rename(columns={0: "cords", 1:'emotion'})
     res['x'], res['y'] = zip(*res["cords"])
-    
+    res = res.sort_values('x')
     # plt.bar(res.keys(), res.values(), 1, color='g')
-    print(res)
+    for x in res.iterrows():
+        print(x)
 
 
-    plt.show()
+
         
 
 
 
 
-    # sns.scatterplot(data=res, x='x', y='y')
+    sns.scatterplot(data=res, x='x', y='y')
+    plt.show()
+
     # plt.show()
     
     # res = res.rename(columns={0: "cords", 1:'emotion'})
