@@ -2,6 +2,7 @@
 import os 
 import cv2
 import collections
+from collections import Counter
 import numpy as np 
 import pandas as pd
 import seaborn as sns
@@ -34,8 +35,8 @@ class Molecule:
             self.leftEyeGrey  = cv2.cvtColor(self.leftEye, cv2.COLOR_BGR2GRAY)
             self.rightEyeGrey = cv2.cvtColor(self.rightEye, cv2.COLOR_BGR2GRAY)
             self.leftArray, self.rightArray = np.array(self.leftEyeGrey), np.array(self.rightEyeGrey)
-            # self.leftArray = self.blurToGaus(self.leftEyeGrey)
-            # self.rightArray = self.blurToGaus(self.rightEyeGrey)
+            #self.leftArray = self.blurToGaus(self.leftEyeGrey)
+            #self.rightArray = self.blurToGaus(self.rightEyeGrey)
             self.getDpr()
            
            
@@ -57,14 +58,16 @@ class Molecule:
         dpcRight = np.count_nonzero(right) 
         self.dprRightEye = (dpcRight / (dpcRight + zero_countR) )
         
-        self.x = zero_countL#self.dprRightEye
-        self.y = zero_countR #self.dprLeftEye
+        self.x = self.dprLeftEye#abs(zero_countL-zero_countR) #self.dprRightEye#self.dprRightEye
+        self.y = self.dprRightEye#abs(self.dprRightEye-self.dprLeftEye)#self.dprLeftEye#zero_countR #self.dprLeftEye
+        self.z = abs(dpcLeft-dpcRight)#round(self.dprRightEye,2)#abs(dpcLeft-dpcRight)
+
 
     def blurToGaus(self, imgToBlur, kernal=(0,0)):
         # resource: https://docs.opencv.org/3.4/d4/d13/tutorial_py_filtering.html
         # GAUSS
         # deltaImg = cv2.GaussianBlur(imgToBlur,kernal,cv2.BORDER_DEFAULT)
-        deltaImg = cv2.bilateralFilter(imgToBlur,5,5,5)
+        deltaImg = cv2.bilateralFilter(imgToBlur,0,0,0)
         # cv2.imshow('bilateral filter', deltaImg)
         # cv2.waitKey(0) # waits until a key is pressed
         # cv2.destroyAllWindows() 
@@ -86,44 +89,64 @@ if __name__ == '__main__':
     for label in os.listdir('eyeData'):
         
         for imgFolder in os.listdir('eyeData/'+label):
+            # if imgFolder in ['neutral']:
+            #     continue
             deltaPath = 'eyeData/'+label+'/'+imgFolder
             if len(deltaPath) > 1:
                 delta = Molecule(label, deltaPath)
                 if delta.x and delta.y:
-                    x = round(delta.x,2)
-                    y = round(delta.y,2)
+                    x = round(delta.x,1)
+                    y = round(delta.y,1)
+                    z = round(delta.z,1)
                     graph[ (x,y) ].append(delta.label)
-                    cords[ (x,y) ] = delta.vibe
+                    cords[ (x,y,z) ].append(delta.vibe)
     
     
-    
+    colors = {
+                0:'red',
+                1:'yellow',
+                2:'purple',
+                3: 'green',
+                4: 'blue',
+                5: 'black',
+                6: 'gold'
+                }
 
                 #cols x,y,label
     print('processing dpr done')
-    res = pd.DataFrame(graph.items())
+    res = pd.DataFrame(cords.items())
     #print(res)
     res = res.rename(columns={0: "cords", 1:'emotion'})
-    res['x'], res['y'] = zip(*res["cords"])
+    # Z score for usablity
+    res['x'], res['y'], res['z'] = zip(*res["cords"])
     res = res.sort_values('x')
+    # emotion score -> avg value of cord arrays
+    #res[sum(res['emotion'])]
+    res[res['z'] > 5] = -1
+    
+    # mapOfEmotions = pd.DataFrame(columns=['x','y','z','emotion'])
+    # print(mapOfEmotions)
+
+    mapOfEmotions = pd.DataFrame()
+    for idx,row in res.iterrows():
+        if row['emotion'] != -1 and len(row['emotion']) > 1:
+            vote = Counter(row['emotion'])
+            if vote.most_common(1)[0][1] > 1:
+                row['emotion'] = vote.most_common(1)[0][0]
+                mapOfEmotions = mapOfEmotions.append(row)
+    # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
+    # print(cleanMap)
+    print(mapOfEmotions)
+
+
     # plt.bar(res.keys(), res.values(), 1, color='g')
-    for x in res.iterrows():
-        print(x)
+    # for x in res.iterrows():
+    #     print(x)
 
-
-
-        
-
-
-
-
-    sns.scatterplot(data=res, x='x', y='y')
+    sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
     plt.show()
 
-    # plt.show()
-    
-    # res = res.rename(columns={0: "cords", 1:'emotion'})
-    # res['x'], res['y'] = zip(*res["cords"])
-    # print('scatter')
-    # print(res)
-    # sns.scatterplot(data=res, x='x', y='y', hue='emotion')
+    # fig = plt.figure(figsize=(12, 12))
+    # ax = fig.add_subplot(projection='3d')     
+    # ax.scatter(mapOfEmotions['x'], mapOfEmotions['y'], mapOfEmotions['z'], c=mapOfEmotions['emotion'].map(colors))
     # plt.show()
