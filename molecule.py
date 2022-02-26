@@ -16,6 +16,7 @@ emotionVibes = {
                 'surprise': 4,
                 'neutral': 5,
                 'sadness': 6,
+                'predict':-1
                 }
 
 class Molecule:
@@ -40,7 +41,6 @@ class Molecule:
             self.getDpr()
            
            
-
     def getDpr(self, threshold=75):
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
@@ -77,77 +77,87 @@ class Molecule:
         pass
 
     def useScore(self):
-        pass 
+        return self.z  
 
-
-
-
-
-if __name__ == '__main__':
-    graph = collections.defaultdict(list)
-    cords = collections.defaultdict(list)
-    for label in os.listdir('eyeData'):
-        
-        for imgFolder in os.listdir('eyeData/'+label):
-            # if imgFolder in ['neutral']:
-            #     continue
-            deltaPath = 'eyeData/'+label+'/'+imgFolder
-            if len(deltaPath) > 1:
-                delta = Molecule(label, deltaPath)
-                # both eyes y'all
-                if delta.x and delta.y:
-                    x = round(delta.x,1)
-                    y = round(delta.y,1)
-                    z = round(delta.z,1)
-                    graph[ (x,y) ].append(delta.label)
-                    cords[ (x,y,z) ].append(delta.vibe)
-    
-    
-    colors = {
-                0:'red',
+    def train(self):
+        colors = {
+                0:'orange',
                 1:'yellow',
                 2:'purple',
                 3: 'green',
                 4: 'blue',
                 5: 'black',
-                6: 'gold'
+                6: 'gold',
+                'predict': 'red'
                 }
+        
+        graph = collections.defaultdict(list)
+        cords = collections.defaultdict(list)
+        
+        for label in os.listdir('eyeData'):    
+            for imgFolder in os.listdir('eyeData/'+label):
+                # if imgFolder in ['neutral']:
+                #     continue
+                deltaPath = 'eyeData/'+label+'/'+imgFolder
+                if len(deltaPath) > 1:
+                    delta = Molecule(label, deltaPath)
+                    # both eyes y'all
+                    if delta.x and delta.y:
+                        x = round(delta.x,1)
+                        y = round(delta.y,1)
+                        z = round(delta.z,1)
+                        graph[ (x,y) ].append(delta.label)
+                        cords[ (x,y,z) ].append(delta.vibe)
+        self.graph = graph 
+        self.cords = cords
+
+    def predict(self):
+        pass
+            # sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+            # plt.show()
+        
+
+
+
+
+
+
 
                 #cols x,y,label
-    print('processing dpr done')
-    res = pd.DataFrame(graph.items())
-    #print(res)
-    res = res.rename(columns={0: "cords", 1:'emotion'})
-    # Z score for usablity
-    #res['x'], res['y'], res['z'] = zip(*res["cords"])
-    res['x'], res['y'] = zip(*res["cords"])
+    # print('processing dpr done')
+    # res = pd.DataFrame(graph.items())
+    # #print(res)
+    # res = res.rename(columns={0: "cords", 1:'emotion'})
+    # # Z score for usablity
+    # #res['x'], res['y'], res['z'] = zip(*res["cords"])
+    # res['x'], res['y'] = zip(*res["cords"])
     
-    res = res.sort_values('x')
-    # emotion score -> avg value of cord arrays
-    #res[sum(res['emotion'])]
-    #res[res['z'] > 10] = -1
+    # res = res.sort_values('x')
+    # # emotion score -> avg value of cord arrays
+    # #res[sum(res['emotion'])]
+    # #res[res['z'] > 10] = -1
     
-    # mapOfEmotions = pd.DataFrame(columns=['x','y','z','emotion'])
-    # print(mapOfEmotions)
+    # # mapOfEmotions = pd.DataFrame(columns=['x','y','z','emotion'])
+    # # print(mapOfEmotions)
 
-    mapOfEmotions = pd.DataFrame()
-    for idx,row in res.iterrows():
-        if row['emotion'] != -1 and len(row['emotion']) > 1:
-            vote = Counter(row['emotion'])
-            if vote.most_common(1)[0][1] > 1:
-                row['emotion'] = vote.most_common(1)[0][0]
-                mapOfEmotions = mapOfEmotions.append(row)
-    # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
-    # print(cleanMap)
-    print(mapOfEmotions)
+    # mapOfEmotions = pd.DataFrame()
+    # for idx,row in res.iterrows():
+    #     if row['emotion'] != -1 and len(row['emotion']) > 1:
+    #         vote = Counter(row['emotion'])
+    #         if vote.most_common(1)[0][1] > 1:
+    #             row['emotion'] = vote.most_common(1)[0][0]
+    #             mapOfEmotions = mapOfEmotions.append(row)
+    # # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
+    # # print(cleanMap)
+    # print(mapOfEmotions)
 
 
     # plt.bar(res.keys(), res.values(), 1, color='g')
     # for x in res.iterrows():
     #     print(x)
 
-    sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
-    plt.show()
+    # sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+    # plt.show()
 
 
 

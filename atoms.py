@@ -32,38 +32,20 @@ class Atom:
             self.shape = predictor(self.gray, rect)
             shape = self.getEyes()
 
-            #for (x,y) in shape:
-                #cv2.circle(self.img, (x, y), 2, (255, 0, 0), -1)
-                # if (x, y) in self.leftEye:
-                #     cv2.circle(self.img, (x, y), 2, (255, 0, 0), -1)
-                # if (x, y) in self.rightEye:
-                #     cv2.circle(self.img, (x, y), 2, (0, 0, 255), -1)
-
     def getEyes(self):
-
-        leftEye,rightEye =[36,37,38,39,40,41],[42,43,44,45,46,47]
-       
-        # left  x1:36, x2:39, y1:41, y2:38
-        # right x1:42, x2:45, y1:46, y2: 44
-        print(self.shape)
+        leftEye  = [36,37,38,39,40,41]
+        rightEye = [42,43,44,45,46,47]
         if self.shape:
             lEye, rEye = [], []
             coords = np.zeros((68, 2), dtype=int)
             for i in range(0, 68):
                 coords[i] = (self.shape.part(i).x, self.shape.part(i).y)
-                # if i in leftEye:
-                #     lEye.append((self.shape.part(i).x, self.shape.part(i).y))
-                # if i in rightEye:
-                #     rEye.append((self.shape.part(i).x, self.shape.part(i).y))
-            
-            #print(coords)
+              
             self.leftEyeCords =  {'x1': coords[36][0], 'x2': coords[39][0], 'y1':coords[38][1], 'y2': coords[41][1]}
             self.rightEyeCords = {'x1': coords[42][0], 'x2': coords[45][0], 'y1':coords[43][1], 'y2': coords[46][1]}
         
             self.coords = coords
-            # self.leftEye = lEye
-            # self.rightEye = rEye
-            return coords
+            
 
     def processEyes(self):
         # cropped = img[start_row:end_row, start_col:end_col]
@@ -80,39 +62,56 @@ class Atom:
             self.leftEyeArray  =  np.array(self.leftEyeImg.copy())
             self.rightEyeArray =  np.array(self.rightEyeImg.copy())
          
+    def createMolecule(self,title):
+        #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
+        if len(self.rightEyeImg) > 1 and len(self.leftEyeImg) > 1:
+        
+            os.makedirs('prediction')
+            cv2.imwrite('prediction/LeftEye.png', self.leftEyeImg)
+            cv2.imwrite('prediction/RightEye.png', self.rightEyeImg)
+            self.moleculeImgPath = 'prediction'
+        
+            # try:
+            #     cv2.imwrite(self.moleculeImgPath+'/LeftEye', self.leftEyeImg)
+            #     cv2.imwrite(self.moleculeImgPath+'/RightEye', self.rightEyeImg)
+                    
+            # except cv2.error as e:
+            #     print('error dang')
 
-if __name__ == "__main__":
-    # face = dlibCords('/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png')
-    # face.getFaceLandMarks()
-    # cv2.imshow('image window', face.img)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+# if __name__ == "__main__":
+#     print('meow')
+#     # face = dlibCords('/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png')
+#     # face.getFaceLandMarks()
+#     # cv2.imshow('image window', face.img)
+#     # cv2.waitKey(0)
+#     # cv2.destroyAllWindows()
 
-    # if not os.path.exists('/tmp/test'):
-    # os.mknod('/tmp/test')
+#     # if not os.path.exists('/tmp/test'):
+#     # os.mknod('/tmp/test')
 
-    for label in os.listdir('images/train'):
-        count = 0
-        for img in os.listdir('images/train/'+label):
-            deltaPath = 'images/train/'+label+'/'+img 
-            atomOne = Atom(label, deltaPath)
-            atomOne.proccessImg()
-            atomOne.processEyes()
-            #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
-            if len(atomOne.rightEyeImg) > 1 and len(atomOne.leftEyeImg) > 1:
-                os.makedirs('eyeData/'+label+'/'+str(count))
-                newFilePathL  = 'eyeData/'+label+'/'+str(count)+'/'+'L'+img
-                newFilePathR  = 'eyeData/'+label+'/'+str(count)+'/'+'R'+img
-                # if not os.path.exists(newFilePathL):
-                #     os.makedirs(newFilePathL)
-                #     os.makedirs(newFilePathR)
-                count += 1
-                try:
-                    cv2.imwrite(newFilePathL, atomOne.leftEyeImg)
-                    cv2.imwrite(newFilePathR, atomOne.rightEyeImg)
-                   
-                except cv2.error as e:
-                    print('error dang')
+#     for label in os.listdir('images/train'):
+#         if label == 'neutral':
+#             count = 0
+#             for img in os.listdir('images/train/'+label):
+#                 deltaPath = 'images/train/'+label+'/'+img 
+#                 atomOne = Atom(label, deltaPath)
+#                 atomOne.proccessImg()
+#                 atomOne.processEyes()
+#                 #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
+#                 if len(atomOne.rightEyeImg) > 1 and len(atomOne.leftEyeImg) > 1:
+#                     os.makedirs('eyeData/'+label+'/'+str(count))
+#                     newFilePathL  = 'eyeData/'+label+'/'+str(count)+'/'+'L'+img
+#                     newFilePathR  = 'eyeData/'+label+'/'+str(count)+'/'+'R'+img
+#                     # if not os.path.exists(newFilePathL):
+#                     #     os.makedirs(newFilePathL)
+#                     #     os.makedirs(newFilePathR)
+#                     count += 1
+#                     try:
+#                         cv2.imwrite(newFilePathL, atomOne.leftEyeImg)
+#                         cv2.imwrite(newFilePathR, atomOne.rightEyeImg)
+                    
+#                     except cv2.error as e:
+#                         print('error dang')
     
 
 
