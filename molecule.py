@@ -80,22 +80,8 @@ class Molecule:
         return self.z  
 
     def train(self):
-        res = pd.DataFrame(graph.items())
-        res = res.rename(columns={0: "cords", 1:'emotion'})
-        res['x'], res['y'] = zip(*res["cords"])
-        res = res.sort_values('x')
+    
 
-
-        mapOfEmotions = pd.DataFrame()
-        for idx,row in res.iterrows():
-            if row['emotion'] != -1 and len(row['emotion']) > 1:
-                vote = Counter(row['emotion'])
-                if vote.most_common(1)[0][1] > 1:
-                    row['emotion'] = vote.most_common(1)[0][0]
-                    mapOfEmotions = mapOfEmotions.append(row)
-        # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
-        # print(cleanMap)
-        print(mapOfEmotions)
 
 
 
@@ -128,7 +114,25 @@ class Molecule:
                         cords[ (x,y,z) ].append(delta.vibe)
         self.graph = graph 
         self.cords = cords
+
+        res = pd.DataFrame(graph.items())
+        res = res.rename(columns={0: "cords", 1:'emotion'})
+        res['x'], res['y'] = zip(*res["cords"])
+        res = res.sort_values('x')
+
+        mapOfEmotions = pd.DataFrame()
+        for idx,row in res.iterrows():
+            if row['emotion'] != -1 and len(row['emotion']) > 1:
+                vote = Counter(row['emotion'])
+                if vote.most_common(1)[0][1] > 1:
+                    row['emotion'] = vote.most_common(1)[0][0]
+                    mapOfEmotions = mapOfEmotions.append(row)
+        # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
+        # print(cleanMap)
+
+     
         self.map = sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+        plt.legend()
         plt.show()
 
     def predict(self):
