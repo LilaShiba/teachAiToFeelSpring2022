@@ -46,7 +46,6 @@ class Atom:
         
             self.coords = coords
             
-
     def processEyes(self):
         # cropped = img[start_row:end_row, start_col:end_col]
         img = self.img

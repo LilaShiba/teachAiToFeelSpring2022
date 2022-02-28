@@ -41,6 +41,7 @@ class Molecule:
             self.getDpr()
            
            
+
     def getDpr(self, threshold=75):
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
@@ -62,7 +63,6 @@ class Molecule:
         self.y = self.dprRightEye#abs(self.dprRightEye-self.dprLeftEye)#self.dprLeftEye#zero_countR #self.dprLeftEye
         self.z = abs(dpcLeft-dpcRight)#round(self.dprRightEye,2)#abs(dpcLeft-dpcRight)
 
-
     def blurToGaus(self, imgToBlur, kernal=(0,0)):
         # resource: https://docs.opencv.org/3.4/d4/d13/tutorial_py_filtering.html
         # GAUSS
@@ -80,15 +80,33 @@ class Molecule:
         return self.z  
 
     def train(self):
+        res = pd.DataFrame(graph.items())
+        res = res.rename(columns={0: "cords", 1:'emotion'})
+        res['x'], res['y'] = zip(*res["cords"])
+        res = res.sort_values('x')
+
+
+        mapOfEmotions = pd.DataFrame()
+        for idx,row in res.iterrows():
+            if row['emotion'] != -1 and len(row['emotion']) > 1:
+                vote = Counter(row['emotion'])
+                if vote.most_common(1)[0][1] > 1:
+                    row['emotion'] = vote.most_common(1)[0][0]
+                    mapOfEmotions = mapOfEmotions.append(row)
+        # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
+        # print(cleanMap)
+        print(mapOfEmotions)
+
+
+
         colors = {
-                0:'orange',
+                0:'red',
                 1:'yellow',
                 2:'purple',
                 3: 'green',
                 4: 'blue',
                 5: 'black',
-                6: 'gold',
-                'predict': 'red'
+                6: 'gold'
                 }
         
         graph = collections.defaultdict(list)
@@ -110,13 +128,14 @@ class Molecule:
                         cords[ (x,y,z) ].append(delta.vibe)
         self.graph = graph 
         self.cords = cords
+        self.map = sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+        plt.show()
 
     def predict(self):
         pass
             # sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
             # plt.show()
         
-
 
 
 

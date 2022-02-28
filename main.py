@@ -2,7 +2,9 @@ from atoms import Atom
 from molecule import Molecule
 
 label = 'predict'
-imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
+#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happyTest.jpeg'
+#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/angryTest.webp'
+imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/obama.jpeg'
 
 
 class graphInput():
@@ -19,6 +21,7 @@ class graphInput():
         molecule = Molecule(label, atom.moleculeImgPath)
         print('x:',  molecule.x)
         print('y',  molecule.y)
+        molecule.train()
 
 
 
