@@ -16,3 +16,9 @@
 # 68 face landmark detection
 
 <img src="https://s3.ap-south-1.amazonaws.com/s3.studytonight.com/curious/uploads/pictures/1592469192-74364.png" width="100" height="100">
+
+# How To Use
+
+- Atoms: are the first lvl of abstraction. As such, this is where images are processed.
+- Molecules: are two Atoms placed together, right eye and left eye. This is where DPR is found and graphed
+- Cells: TBD
