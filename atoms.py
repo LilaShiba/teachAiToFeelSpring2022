@@ -8,9 +8,9 @@ import os
 class Atom:
 
     def __init__(self,label,imgPath):
+        #empty bois
         self.x = None
         self.y = None 
-        self.label = label
         self.leftEyeCords = None 
         self.rightEyeCords = None
         self.leftEyeImg = [] 
@@ -18,6 +18,8 @@ class Atom:
         self.leftEyeArray = []
         self.rightEyeArray = []
         self.cords = ()
+        #lil process
+        self.label = label
         self.imgPath = imgPath 
         self.img = cv2.imread(imgPath)
         self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
@@ -70,55 +72,3 @@ class Atom:
             cv2.imwrite('prediction/RightEye.png', self.rightEyeImg)
             self.moleculeImgPath = 'prediction'
         
-            # try:
-            #     cv2.imwrite(self.moleculeImgPath+'/LeftEye', self.leftEyeImg)
-            #     cv2.imwrite(self.moleculeImgPath+'/RightEye', self.rightEyeImg)
-                    
-            # except cv2.error as e:
-            #     print('error dang')
-
-# if __name__ == "__main__":
-#     print('meow')
-#     # face = dlibCords('/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png')
-#     # face.getFaceLandMarks()
-#     # cv2.imshow('image window', face.img)
-#     # cv2.waitKey(0)
-#     # cv2.destroyAllWindows()
-
-#     # if not os.path.exists('/tmp/test'):
-#     # os.mknod('/tmp/test')
-
-#     for label in os.listdir('images/train'):
-#         if label == 'neutral':
-#             count = 0
-#             for img in os.listdir('images/train/'+label):
-#                 deltaPath = 'images/train/'+label+'/'+img 
-#                 atomOne = Atom(label, deltaPath)
-#                 atomOne.proccessImg()
-#                 atomOne.processEyes()
-#                 #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
-#                 if len(atomOne.rightEyeImg) > 1 and len(atomOne.leftEyeImg) > 1:
-#                     os.makedirs('eyeData/'+label+'/'+str(count))
-#                     newFilePathL  = 'eyeData/'+label+'/'+str(count)+'/'+'L'+img
-#                     newFilePathR  = 'eyeData/'+label+'/'+str(count)+'/'+'R'+img
-#                     # if not os.path.exists(newFilePathL):
-#                     #     os.makedirs(newFilePathL)
-#                     #     os.makedirs(newFilePathR)
-#                     count += 1
-#                     try:
-#                         cv2.imwrite(newFilePathL, atomOne.leftEyeImg)
-#                         cv2.imwrite(newFilePathR, atomOne.rightEyeImg)
-                    
-#                     except cv2.error as e:
-#                         print('error dang')
-    
-
-
-  
-    # cv2.imshow('bork', atomOne.leftEyeImg)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    # print(atomOne.rightEyeArray)
-    # cv2.imshow('bork', atomOne.rightEyeImg)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
