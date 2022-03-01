@@ -21,4 +21,4 @@
 
 - Atoms: are the first lvl of abstraction. As such, this is where images are processed.
 - Molecules: are two Atoms placed together, right eye and left eye. This is where DPR is found and graphed
-- Cells: TBD
+- Cells: are K nearest Molecules. This is where case based reasoning takes place. 
