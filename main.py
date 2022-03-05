@@ -1,9 +1,10 @@
 from atoms import Atom 
-from molecule import Molecule
+from molecules import Molecule
 from cells import Cell
+from tissue import Tissue
 
 label = 'predict'
-imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happyTest.jpeg'
+imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/cas.jpg'
 
 class graphInput():
     
@@ -22,7 +23,8 @@ class graphInput():
         molecule.train()
         # Analogus Reasoning
         cell = Cell(molecule)
-        cell.gatherAnalogies(molecule)
+        cell.gatherAnalogiesView(molecule)
+        cell.createAnalogies(molecule)
 
 
 
