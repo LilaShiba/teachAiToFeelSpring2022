@@ -4,8 +4,8 @@ from cells import Cell
 from tissue import Tissue
 
 label = 'predict'
-imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/cas.jpg'
-
+#imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/validation/angry/966.jpg'
+imgPath = 'images/validation/fear/7748.jpg'
 class graphInput():
     
     def __init__(self,label,imgPath):
@@ -25,6 +25,7 @@ class graphInput():
         cell = Cell(molecule)
         cell.gatherAnalogiesView(molecule)
         cell.createAnalogies(molecule)
+        # Systems Brah aka tissue
 
 
 

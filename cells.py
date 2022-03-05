@@ -39,3 +39,4 @@ class Cell:
         '''
             return network of analogus cells
         '''
+        pass
