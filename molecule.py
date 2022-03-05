@@ -27,6 +27,7 @@ class Molecule:
         self.x = None
         self.y = None
         self.vibe = emotionVibes[label]
+        self.graph = collections.defaultdict(list)
 
         
         if len(os.listdir(filePath)) > 1:
@@ -71,8 +72,10 @@ class Molecule:
         # cv2.destroyAllWindows() 
         return np.array(deltaImg)
 
-    def showEyes(self):
-        pass
+    def show(self):
+        map = sns.scatterplot(data=self.mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+        plt.legend()
+        plt.show()
 
     def useScore(self):
         return self.z  
@@ -80,17 +83,19 @@ class Molecule:
     def train(self):
     
         colors = {
-                0:'red',
+                0:'teal',
                 1:'yellow',
                 2:'purple',
                 3: 'green',
                 4: 'blue',
                 5: 'black',
-                6: 'gold'
+                6: 'gold',
+                -1:'red'
                 }
         
         graph = collections.defaultdict(list)
         cords = collections.defaultdict(list)
+        knnMap = collections.defaultdict(list)
         
         for label in os.listdir('eyeData'):    
             for imgFolder in os.listdir('eyeData/'+label):
@@ -106,8 +111,11 @@ class Molecule:
                         z = round(delta.z,1)
                         graph[ (x,y) ].append(delta.label)
                         cords[ (x,y,z) ].append(delta.vibe)
+                        knnMap[(x,y)].append((delta.label, delta))
+
         self.graph = graph 
         self.cords = cords
+        self.knnMap = knnMap
 
         res = pd.DataFrame(graph.items())
         res = res.rename(columns={0: "cords", 1:'emotion'})
@@ -116,15 +124,15 @@ class Molecule:
 
         mapOfEmotions = pd.DataFrame()
         for idx,row in res.iterrows():
-            if row['emotion'] != -1 and len(row['emotion']) > 1:
+            if row['emotion'] != -1 and len(row['emotion']) > 10:
                 vote = Counter(row['emotion'])
-                if vote.most_common(1)[0][1] > 1:
+                if vote.most_common(1)[0][1] > 3:
                     row['emotion'] = vote.most_common(1)[0][0]
                     mapOfEmotions = mapOfEmotions.append(row)
         # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
         # print(cleanMap)
 
-     
+        self.mapOfEmotions = mapOfEmotions
         self.map = sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
         plt.legend()
         plt.show()
