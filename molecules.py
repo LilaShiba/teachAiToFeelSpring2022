@@ -41,7 +41,7 @@ class Molecule:
             #self.rightArray = self.blurToGaus(self.rightEyeGrey)
             self.getDpr()
                    
-    def getDpr(self, threshold=75):
+    def getDpr(self, threshold=50):
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
         # Left EYE
@@ -94,7 +94,7 @@ class Molecule:
                 }
         
         graph = collections.defaultdict(list)
-        cords = collections.defaultdict(list)
+        #cords = collections.defaultdict(list)
         knnMap = collections.defaultdict(list)
         
         for label in os.listdir('eyeData'):    
@@ -102,19 +102,20 @@ class Molecule:
                 # if imgFolder in ['neutral']:
                 #     continue
                 deltaPath = 'eyeData/'+label+'/'+imgFolder
-                if len(deltaPath) > 1:
-                    delta = Molecule(label, deltaPath)
+                #if len(deltaPath) >= 5:
+                delta = Molecule(label, deltaPath)
                     # both eyes y'all
-                    if delta.x and delta.y:
-                        x = round(delta.x,2)
-                        y = round(delta.y,2)
-                        z = round(delta.z,2)
+                if delta.x and delta.y:
+                    x = round(delta.x,2)
+                    y = round(delta.y,2)
+                    if abs(x-y) < 15:
+                        # z = round(delta.z,2)
                         graph[ (x,y) ].append(delta.label)
-                        cords[ (x,y,z) ].append(delta.vibe)
+                        #cords[ (x,y,z) ].append(delta.vibe)
                         knnMap[(x,y)].append((delta.label, delta))
 
         self.graph = graph 
-        self.cords = cords
+        #self.cords = cords
         self.knnMap = knnMap
 
         res = pd.DataFrame(graph.items())
@@ -124,9 +125,9 @@ class Molecule:
 
         mapOfEmotions = pd.DataFrame()
         for idx,row in res.iterrows():
-            if row['emotion'] != -1 and len(row['emotion']) > 0:
+            if len(row['emotion']) >= 5:
                 vote = Counter(row['emotion'])
-                if vote.most_common(1)[0][1] > 0:
+                if vote.most_common(1)[0][1] >= 3:
                     row['emotion'] = vote.most_common(1)[0][0]
                     mapOfEmotions = mapOfEmotions.append(row)
         # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
