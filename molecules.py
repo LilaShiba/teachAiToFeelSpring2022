@@ -125,11 +125,11 @@ class Molecule:
 
         mapOfEmotions = pd.DataFrame()
         for idx,row in res.iterrows():
-            if len(row['emotion']) >= 5:
-                vote = Counter(row['emotion'])
-                if vote.most_common(1)[0][1] >= 3:
-                    row['emotion'] = vote.most_common(1)[0][0]
-                    mapOfEmotions = mapOfEmotions.append(row)
+            #if len(row['emotion']) >= 3:
+            vote = Counter(row['emotion'])
+            if vote.most_common(1)[0][1] / len(row['emotion']) > .50:
+                row['emotion'] = vote.most_common(1)[0][0]
+                mapOfEmotions = mapOfEmotions.append(row)
         # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
         # print(cleanMap)
 
