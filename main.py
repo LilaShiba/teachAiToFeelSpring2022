@@ -12,8 +12,10 @@ class graphInput():
         self.label = label 
         self.imgPath = imgPath
         # Process Face Data (DPR)
-        # on init, atom.proccessImg(), atom.processEyes() will run
-        atom = Atom(label, imgPath)   
+        # on init,  will run
+        atom = Atom(label, imgPath) 
+        # atom.proccessImg() 
+        # atom.processEyes()  
         # create prediction folder / moleculeImgPath
         atom.createMolecule(label)
         # Process Emotion (KNN)

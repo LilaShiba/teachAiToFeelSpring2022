@@ -67,10 +67,12 @@ class Atom:
          
     def createMolecule(self,title):
         #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
+        count = 0
         if len(self.rightEyeImg) > 1 and len(self.leftEyeImg) > 1:
-        
-            os.makedirs('prediction')
-            cv2.imwrite('prediction/LeftEye.png', self.leftEyeImg)
-            cv2.imwrite('prediction/RightEye.png', self.rightEyeImg)
-            self.moleculeImgPath = 'prediction'
+            delta = 'prediction_'+str(count)
+            os.makedirs(delta)
+            cv2.imwrite(delta+'/LeftEye.png', self.leftEyeImg)
+            cv2.imwrite(delta+'/RightEye.png', self.rightEyeImg)
+            self.moleculeImgPath = delta
+            count+=1
         
