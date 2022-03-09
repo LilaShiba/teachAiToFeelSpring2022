@@ -31,6 +31,7 @@ class Atom:
     def proccessImg(self):
         predictor = dlib.shape_predictor('models/shape_predictor_68_face_landmarks.dat')
         for (i, rect) in enumerate(self.rects):
+          
             self.shape = predictor(self.gray, rect)
             shape = self.getEyes()
 
@@ -47,6 +48,7 @@ class Atom:
             self.rightEyeCords = {'x1': coords[42][0], 'x2': coords[45][0], 'y1':coords[43][1], 'y2': coords[46][1]}
         
             self.coords = coords
+            self.processEyes()
             
     def processEyes(self):
         # cropped = img[start_row:end_row, start_col:end_col]

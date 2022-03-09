@@ -12,14 +12,17 @@ class graphInput():
         self.label = label 
         self.imgPath = imgPath
         # Process Face Data (DPR)
-        atom = Atom(label, imgPath)
-        atom.processEyes()
-        atom.proccessImg()
+        # on init, atom.proccessImg(), atom.processEyes() will run
+        atom = Atom(label, imgPath)   
+        # create prediction folder / moleculeImgPath
         atom.createMolecule(label)
         # Process Emotion (KNN)
+        # On init, getDpr runs
         molecule = Molecule(label, atom.moleculeImgPath)
         print('x:',  molecule.x)
         print('y:',  molecule.y)
+        # knn graph where 
+        # xAxis=dprRightEye, yAxis=dprLeftEye , hue=label
         molecule.train()
         # Analogus Reasoning
         cell = Cell(molecule)
