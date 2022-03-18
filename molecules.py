@@ -135,6 +135,8 @@ class Molecule:
 
         self.mapOfEmotions = mapOfEmotions
         sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+        plt.plot(self.x, self.y, marker="o", markersize=20, color="red")
+
         plt.legend()
         plt.show()
 
