@@ -26,10 +26,12 @@ class graphInput():
         # knn graph where 
         # xAxis=dprRightEye, yAxis=dprLeftEye , hue=label
         molecule.train()
+        #print(molecule.knnMap)
         # Analogus Reasoning
-        cell = Cell(molecule)
-        cell.gatherAnalogiesView(molecule)
-        cell.createAnalogies(molecule)
+        puppyCell = Cell(molecule.x, molecule.y, molecule.knnMap)
+        puppyCell.knn(5)
+        # cell.gatherAnalogiesView(molecule)
+        # cell.createAnalogies(molecule)
         # Systems Brah aka tissue
 
 

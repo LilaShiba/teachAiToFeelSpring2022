@@ -68,6 +68,7 @@ class Atom:
     def createMolecule(self,title):
         #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
         count = 0
+        # if both eyes found
         if len(self.rightEyeImg) > 1 and len(self.leftEyeImg) > 1:
             delta = 'prediction_'+str(count)
             os.makedirs(delta)

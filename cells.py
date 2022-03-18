@@ -8,10 +8,25 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 class Cell:
-    def __init__(self,target):
-        self.x = target.x
-        self.y = target.y
-        self.target = target
+    def __init__(self,x,y,mapOfWorld):
+        self.x = x
+        self.y = y
+        self.target = (x,y)
+        self.mapOfWorld = mapOfWorld
+
+    def knn(self, k):
+        mOw = self.mapOfWorld
+        mOw = pd.DataFrame(mOw.items())
+        mOw = mOw.rename(columns={0: "idx", 1:'molecule'})
+        mOw['dist'] = mOw['idx'].apply(self.dist_heuristic)
+        print(mOw.head(k))
+
+    def dist_heuristic(self, cords):
+        xa, ya = self.target
+        xb, yb = cords
+        return np.sqrt((xa-xb)**2 + (ya-yb)**2)
+
+        
 
     def gatherAnalogiesView(self, target):
         '''
