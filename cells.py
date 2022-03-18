@@ -19,6 +19,7 @@ class Cell:
         mOw = pd.DataFrame(mOw.items())
         mOw = mOw.rename(columns={0: "idx", 1:'molecule'})
         mOw['dist'] = mOw['idx'].apply(self.dist_heuristic)
+        mOw = mOw.sort_values(by=['dist'], ascending=True)
         print(mOw.head(k))
 
     def dist_heuristic(self, cords):
@@ -39,7 +40,7 @@ class Cell:
         #print(targetDataFrame.iloc[-1])
         target.mapOfEmotions.append(targetDataFrame, ignore_index=True)   
         sns.scatterplot(data=target.mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep",label='DPR Rate Right and Left Eye')
-        plt.scatter(x=target.x, y=target.y, color='r', s=40)
+        plt.scatter(x=target.x, y=target.y, color='r', s=30)
         plt.legend()
         plt.show()
 
