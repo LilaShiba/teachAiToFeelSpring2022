@@ -2,6 +2,11 @@ from atoms import Atom
 from molecules import Molecule
 from cells import Cell
 from tissue import Tissue
+import matplotlib.pyplot as plt
+from PIL import Image
+import cv2 
+import os
+
 
 label = 'predict'
 #imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/validation/angry/966.jpg'
@@ -28,8 +33,27 @@ class graphInput():
         molecule.train()
         #print(molecule.knnMap)
         # Analogus Reasoning
-        puppyCell = Cell(molecule.x, molecule.y, molecule.knnMap)
-        puppyCell.knn(5)
+        cell = Cell(molecule.x, molecule.y, molecule.knnMap)
+        cell.knn(5)
+        # collection of edges
+        for array in cell.edges['molecule']:
+            _ ,molecule = array[0],array[1]
+            #folderNumber = molecule[1].filePath.split("/")
+
+            files = os.listdir(molecule[1].filePath)
+            deltaPathL = molecule[1].filePath +'/'+files[0] 
+            deltaPathR = molecule[1].filePath +'/'+files[1] 
+            print('edge left eye:')
+            print('deltaPathL:', deltaPathL)
+            l = Image.open(deltaPathL)
+            l.show()
+            
+
+            print('edge right eye:')
+            print('deltaPathR:', deltaPathR)
+            r = Image.open(deltaPathR)
+            r.show()
+            break  
         # cell.gatherAnalogiesView(molecule)
         # cell.createAnalogies(molecule)
         # Systems Brah aka tissue
