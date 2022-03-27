@@ -9,7 +9,7 @@ import os
 
 
 label = 'predict'
-imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/validation/angry/966.jpg'
+imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/angryTest.jpeg'
 #imgPath = 'images/validation/fear/7748.jpg'
 #imgPath = '/Users/kylejames/Desktop/robitFeelings/teachAiToFeelSpring2022/testing/self.jpg'
 class graphInput():
@@ -34,7 +34,7 @@ class graphInput():
         molecule.train()
         #print(molecule.knnMap)
         # Analogus Reasoning
-        cell = Cell(molecule.x, molecule.y, molecule.knnMap)
+        cell = Cell(molecule.x, molecule.y, molecule.mapOfEmotions)
         cell.knn(5)
         # distro of feelings for working memory, e.g., result of cell.knn aggregated
         cell.gatherAnalogiesView()

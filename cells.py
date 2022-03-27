@@ -20,13 +20,14 @@ class Cell:
 
     def knn(self, k):
         mOw = self.mapOfWorld
-        mOw = pd.DataFrame(mOw.items())
-        mOw = mOw.rename(columns={0: "idx", 1:'molecule'})
-        mOw['dist'] = mOw['idx'].apply(self.dist_heuristic)
-        mOw['x'], mOw['y'] = zip(*mOw["idx"])
+        #mOw = pd.DataFrame(mOw.items())
+        #mOw = mOw.rename(columns={0: "idx", 1:'molecule'})
+        mOw['dist'] = mOw['cords'].apply(self.dist_heuristic)
+        #mOw['x'], mOw['y'] = zip(*mOw["idx"])
         mOw = mOw.sort_values(by=['dist'], ascending=True)
-        self.edges = mOw
-        print(self.edges.head(5))
+        self.edges = mOw[0:k]
+        print('self.edges:')
+        print(self.edges)
 
     def dist_heuristic(self, cords):
         xa, ya = self.target
@@ -36,21 +37,26 @@ class Cell:
         
 
     def gatherAnalogiesView(self):
+        # TODO vectorize
         '''
         returns scatter plot with prediction shown as red circle
         ''' 
         # collection of edges
         self.workingMemory = collections.defaultdict(int)
         count = 0
-        for array in self.edges['molecule']:
-            feeling,molecule,cords = array[0][0],array[0][1],array[0][2]
-            self.workingMemory[feeling] += 1
+        for idx, row in self.edges.iterrows():
+            depth = 0
+            emotion = row[1]
+            dist = row[4]
+            self.workingMemory[emotion] += 1
             count += 1
+            depth += 1
 
         for key, item in self.workingMemory.items():
             self.workingMemory[key] = item / count
 
         print(self.workingMemory)
+        print('wow')
 
             
 
@@ -72,7 +78,7 @@ class Cell:
             # r = Image.open(deltaPathR)
             # r.show()
             # break  
-        print('wow')
+       
 
     def gatherAggregations(self):
         '''
