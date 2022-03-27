@@ -9,9 +9,9 @@ import os
 
 
 label = 'predict'
-#imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/validation/angry/966.jpg'
+imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/validation/angry/966.jpg'
 #imgPath = 'images/validation/fear/7748.jpg'
-imgPath = '/Users/kylejames/Desktop/robitFeelings/teachAiToFeelSpring2022/testing/self.jpg'
+#imgPath = '/Users/kylejames/Desktop/robitFeelings/teachAiToFeelSpring2022/testing/self.jpg'
 class graphInput():
     
     def __init__(self,label,imgPath):
@@ -36,27 +36,8 @@ class graphInput():
         # Analogus Reasoning
         cell = Cell(molecule.x, molecule.y, molecule.knnMap)
         cell.knn(5)
-        # collection of edges
-        for array in cell.edges['molecule']:
-            print('array:')
-            print(array)
-            feeling,molecule = array[0][0],array[0][1]
-            #folderNumber = molecule[1].filePath.split("/")
-
-            files = os.listdir(molecule.filePath)
-            deltaPathL = molecule.filePath +'/'+files[0] 
-            deltaPathR = molecule.filePath +'/'+files[1] 
-            print('edge left eye:')
-            print('deltaPathL:', deltaPathL)
-            l = Image.open(deltaPathL)
-            l.show()
-            
-
-            print('edge right eye:')
-            print('deltaPathR:', deltaPathR)
-            r = Image.open(deltaPathR)
-            r.show()
-            break  
+        # distro of feelings for working memory, e.g., result of cell.knn aggregated
+        cell.gatherAnalogiesView()
         # cell.gatherAnalogiesView(molecule)
         # cell.createAnalogies(molecule)
         # Systems Brah aka tissue

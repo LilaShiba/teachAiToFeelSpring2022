@@ -7,6 +7,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import collections
+import molecules
 
 class Cell:
     def __init__(self,x,y,mapOfWorld):
@@ -25,7 +26,7 @@ class Cell:
         mOw['x'], mOw['y'] = zip(*mOw["idx"])
         mOw = mOw.sort_values(by=['dist'], ascending=True)
         self.edges = mOw
-        #print(mOw.head(k))
+        print(self.edges.head(5))
 
     def dist_heuristic(self, cords):
         xa, ya = self.target
@@ -37,22 +38,47 @@ class Cell:
     def gatherAnalogiesView(self):
         '''
         returns scatter plot with prediction shown as red circle
-        '''
-        # out put
-        # Sort by distance
-        # df = {'cords':(target.x, target.y),'emotion':'predict','x':target.x,'y':target.y}
-        # targetDataFrame = pd.DataFrame(df)
-        #print(targetDataFrame.iloc[-1])
-       # target.mapOfEmotions.append(targetDataFrame, ignore_index=True)   
-        sns.scatterplot(data=self.edges, x='x', y='y', hue='emotion',style='emotion',palette="deep",label='DPR Rate Right and Left Eye')
-        plt.scatter(x=self.x, y=self.y, color='r', s=10)
-        plt.legend()
-        plt.show()
+        ''' 
+        # collection of edges
+        self.workingMemory = collections.defaultdict(int)
+        count = 0
+        for array in self.edges['molecule']:
+            feeling,molecule,cords = array[0][0],array[0][1],array[0][2]
+            self.workingMemory[feeling] += 1
+            count += 1
 
-    def createAnalogies(self, target, k=5):
+        for key, item in self.workingMemory.items():
+            self.workingMemory[key] = item / count
+
+        print(self.workingMemory)
+
+            
+
+
+            #showing images
+
+            # files = os.listdir(molecule.filePath)
+            # deltaPathL = molecule.filePath +'/'+files[0] 
+            # deltaPathR = molecule.filePath +'/'+files[1] 
+
+
+            # print('edge left eye:')
+            # print('deltaPathL:', deltaPathL)
+            # l = Image.open(deltaPathL)
+            # l.show()
+            
+            # print('edge right eye:')
+            # print('deltaPathR:', deltaPathR)
+            # r = Image.open(deltaPathR)
+            # r.show()
+            # break  
+        print('wow')
+
+    def gatherAggregations(self):
         '''
-            target.knnMap => {(cords):(label, analogousMolecule)}
-            returns subregion of knnMap (aka network of cells => tissue), knnMapSubRegion, with links to K analogous molecules
+          Show distrubution of feelings per cord, rather than vote
+          Returns self.distributions[(cords)] = histogram/dict of 
+          feelings and percentage of overall feeling.  
         '''
         pass
 

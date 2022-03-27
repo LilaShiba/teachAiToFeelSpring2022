@@ -111,8 +111,9 @@ class Molecule:
                     if abs(x-y) < 15:
                         # z = round(delta.z,2)
                         graph[ (x,y) ].append(delta.label)
+                        cords = (x,y)
                         #cords[ (x,y,z) ].append(delta.vibe)
-                        knnMap[(x,y)].append((delta.label, delta))
+                        knnMap[(x,y)].append((delta.label, delta, cords))
 
         self.graph = graph 
         #self.cords = cords
