@@ -80,7 +80,7 @@ class Molecule:
     def useScore(self):
         return self.z  
 
-    def train(self):
+    def train(self, k=2):
     
         colors = {
                 0:'teal',
@@ -106,9 +106,10 @@ class Molecule:
                 delta = Molecule(label, deltaPath)
                     # both eyes y'all
                 if delta.x and delta.y:
-                    x = round(delta.x,2)
-                    y = round(delta.y,2)
-                    if abs(x-y) < 15:
+                    x = round(delta.x,k)
+                    y = round(delta.y,k)
+                    if abs(x-y) <= 50:
+                    #if 1 == 1:
                         # z = round(delta.z,2)
                         graph[ (x,y) ].append(delta.label)
                         cords = (x,y)
@@ -122,13 +123,13 @@ class Molecule:
         res = pd.DataFrame(graph.items())
         res = res.rename(columns={0: "cords", 1:'emotion'})
         res['x'], res['y'] = zip(*res["cords"])
-        res = res.sort_values('x')
+        
 
         mapOfEmotions = pd.DataFrame()
         for idx,row in res.iterrows():
             #if len(row['emotion']) >= 3:
             vote = Counter(row['emotion'])
-            if vote.most_common(1)[0][1] / len(row['emotion']) > .50:
+            if vote.most_common(1)[0][1] / len(row['emotion']) > .80:
                 row['emotion'] = vote.most_common(1)[0][0]
                 mapOfEmotions = mapOfEmotions.append(row)
         # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)

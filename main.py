@@ -8,10 +8,13 @@ import cv2
 import os
 
 
-label = 'predict'
-imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/angryTest.jpeg'
+
+#imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/angryTest.jpeg'
 #imgPath = 'images/validation/fear/7748.jpg'
-#imgPath = '/Users/kylejames/Desktop/robitFeelings/teachAiToFeelSpring2022/testing/self.jpg'
+#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/sad/98.jpg'
+#imgPath = 'images/validation/disgust/807.jpg'
+#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/happy/8.jpg'
+#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/sad/798.jpg'
 class graphInput():
     
     def __init__(self,label,imgPath):
@@ -35,7 +38,7 @@ class graphInput():
         #print(molecule.knnMap)
         # Analogus Reasoning
         cell = Cell(molecule.x, molecule.y, molecule.mapOfEmotions)
-        cell.knn(5)
+        cell.knn(7)
         # distro of feelings for working memory, e.g., result of cell.knn aggregated
         cell.gatherAnalogiesView()
         # cell.gatherAnalogiesView(molecule)
@@ -46,4 +49,6 @@ class graphInput():
 
 
 if __name__ == '__main__':
+    label = 'predict'
+    imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
     prediction = graphInput(label, imgPath)
