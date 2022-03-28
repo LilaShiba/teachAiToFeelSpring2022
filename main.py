@@ -10,7 +10,7 @@ import os
 
 
 #imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/angryTest.jpeg'
-#imgPath = 'images/validation/fear/7748.jpg'
+#
 #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/sad/98.jpg'
 #imgPath = 'images/validation/disgust/807.jpg'
 #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/happy/8.jpg'
@@ -35,13 +35,14 @@ class graphInput():
         # knn graph where 
         # xAxis=dprRightEye, yAxis=dprLeftEye , hue=label
         molecule.train()
+        #molecule.showMap()
         #print(molecule.knnMap)
         # Analogus Reasoning
         cell = Cell(molecule.x, molecule.y, molecule.mapOfEmotions)
-        cell.knn(7)
+        cell.knn(5)
         # distro of feelings for working memory, e.g., result of cell.knn aggregated
         cell.gatherAnalogiesView()
-        # cell.gatherAnalogiesView(molecule)
+        cell.gatherAnalogiesView(molecule)
         # cell.createAnalogies(molecule)
         # Systems Brah aka tissue
 
@@ -50,5 +51,6 @@ class graphInput():
 
 if __name__ == '__main__':
     label = 'predict'
-    imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
+    #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
+    imgPath = 'images/validation/fear/7748.jpg'
     prediction = graphInput(label, imgPath)

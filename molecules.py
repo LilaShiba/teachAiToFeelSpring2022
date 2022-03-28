@@ -41,7 +41,7 @@ class Molecule:
             #self.rightArray = self.blurToGaus(self.rightEyeGrey)
             self.getDpr()
                    
-    def getDpr(self, threshold=50):
+    def getDpr(self, threshold=75):
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
         # Left EYE
@@ -108,7 +108,7 @@ class Molecule:
                 if delta.x and delta.y:
                     x = round(delta.x,k)
                     y = round(delta.y,k)
-                    if abs(x-y) <= 50:
+                    if abs(x-y) <= 25:
                     #if 1 == 1:
                         # z = round(delta.z,2)
                         graph[ (x,y) ].append(delta.label)
@@ -129,7 +129,7 @@ class Molecule:
         for idx,row in res.iterrows():
             #if len(row['emotion']) >= 3:
             vote = Counter(row['emotion'])
-            if vote.most_common(1)[0][1] / len(row['emotion']) > .80:
+            if vote.most_common(1)[0][1] / len(row['emotion']) > .50:
                 row['emotion'] = vote.most_common(1)[0][0]
                 mapOfEmotions = mapOfEmotions.append(row)
         # cleanMap = pd.DataFrame.from_dict(mapOfEmotions)
@@ -141,8 +141,8 @@ class Molecule:
         #print('map of emotions:', mapOfEmotions)
         
     def showMap(self):
-        sns.scatterplot(data=mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
-        plt.plot(self.x, self.y, marker="o", markersize=20, color="red")
+        sns.scatterplot(data=self.mapOfEmotions, x='x', y='y', hue='emotion',style='emotion',palette="deep")
+        plt.plot(self.x, self.y, marker="o", markersize=15, color="red")
         plt.legend()
         plt.show()
 

@@ -20,14 +20,11 @@ class Cell:
 
     def knn(self, k):
         mOw = self.mapOfWorld
-        #mOw = pd.DataFrame(mOw.items())
-        #mOw = mOw.rename(columns={0: "idx", 1:'molecule'})
         mOw['dist'] = mOw['cords'].apply(self.dist_heuristic)
         #mOw['x'], mOw['y'] = zip(*mOw["idx"])
         mOw = mOw.sort_values(by=['dist'], ascending=True)
         self.edges = mOw[0:k]
-        # print('self.edges:')
-        # print(self.edges)
+
 
     def dist_heuristic(self, cords):
         xa, ya = self.target
@@ -53,8 +50,8 @@ class Cell:
             
         for key, item in self.workingMemory.items():
             self.workingMemory[key] = item / count
+        print('distro:')
         print(self.workingMemory)
-        print('wow')
 
             
 
