@@ -1,8 +1,9 @@
+import os 
 import cv2
 import dlib
 import collections
 import numpy as np
-import os 
+
 
 
 class Atom:
