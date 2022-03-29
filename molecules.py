@@ -148,4 +148,3 @@ class Molecule:
 
     def predict(self):
         pass
-            

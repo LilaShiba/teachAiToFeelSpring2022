@@ -15,6 +15,7 @@ import os
 #imgPath = 'images/validation/disgust/807.jpg'
 #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/happy/8.jpg'
 #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/sad/798.jpg'
+
 class graphInput():
     
     def __init__(self,label,imgPath):
@@ -39,10 +40,9 @@ class graphInput():
         #print(molecule.knnMap)
         # Analogus Reasoning
         cell = Cell(molecule.x, molecule.y, molecule.mapOfEmotions)
-        cell.knn(5)
+        cell.knn(7)
         # distro of feelings for working memory, e.g., result of cell.knn aggregated
         cell.gatherAnalogiesView()
-        cell.gatherAnalogiesView(molecule)
         # cell.createAnalogies(molecule)
         # Systems Brah aka tissue
 
@@ -52,5 +52,5 @@ class graphInput():
 if __name__ == '__main__':
     label = 'predict'
     #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
-    imgPath = 'images/validation/fear/7748.jpg'
-    prediction = graphInput(label, imgPath)
+    #imgPath = 'testing/self.jpg'
+    prediction = graphInput(label, 'images/images/happy.png')

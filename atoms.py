@@ -50,17 +50,17 @@ class Atom:
             self.coords = coords
             self.processEyes()
             
-    def processEyes(self):
+    def processEyes(self,k=4):
         # cropped = img[start_row:end_row, start_col:end_col]
         img = self.img
         #crop_img = img[y:y+h, x:x+w]
         # We only want data with two eyes for basic training
         if self.leftEyeCords and self.rightEyeCords:
-            self.leftEyeImg = img[self.leftEyeCords['y1']-4: self.leftEyeCords['y2']+4, 
-                                    self.leftEyeCords['x1']-4:self.leftEyeCords['x2']+4].copy()
+            self.leftEyeImg = img[self.leftEyeCords['y1']-k: self.leftEyeCords['y2']+k, 
+                                    self.leftEyeCords['x1']-k:self.leftEyeCords['x2']+k].copy()
             
-            self.rightEyeImg = img[self.rightEyeCords['y1']-4: self.rightEyeCords['y2']+4, 
-                                    self.rightEyeCords['x1']-4:self.rightEyeCords['x2']+4].copy()
+            self.rightEyeImg = img[self.rightEyeCords['y1']-k: self.rightEyeCords['y2']+k, 
+                                    self.rightEyeCords['x1']-k:self.rightEyeCords['x2']+k].copy()
 
             self.leftEyeArray  =  np.array(self.leftEyeImg.copy())
             self.rightEyeArray =  np.array(self.rightEyeImg.copy())
@@ -76,4 +76,3 @@ class Atom:
             cv2.imwrite(delta+'/RightEye.png', self.rightEyeImg)
             self.moleculeImgPath = delta
             count+=1
-        
