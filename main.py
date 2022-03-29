@@ -1,20 +1,12 @@
-from atoms import Atom 
-from molecules import Molecule
-from cells import Cell
-from tissue import Tissue
-import matplotlib.pyplot as plt
-from PIL import Image
-import cv2 
 import os
+import cv2 
+from PIL import Image
+from cells import Cell
+from atoms import Atom 
+from tissue import Tissue
+from molecules import Molecule
+import matplotlib.pyplot as plt
 
-
-
-#imgPath ='/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/angryTest.jpeg'
-#
-#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/sad/98.jpg'
-#imgPath = 'images/validation/disgust/807.jpg'
-#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/happy/8.jpg'
-#imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/sad/798.jpg'
 
 class graphInput():
     
@@ -39,12 +31,14 @@ class graphInput():
         #molecule.showMap()
         #print(molecule.knnMap)
         # Analogus Reasoning
-        cell = Cell(molecule.x, molecule.y, molecule.mapOfEmotions)
-        cell.knn(7)
-        # distro of feelings for working memory, e.g., result of cell.knn aggregated
-        cell.gatherAnalogiesView()
+        cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions)
+        cellNetwork.knn(10)
+        # distro of feelings for working memory, e.g., result of cell.knn aggregated 
+        cellNetwork.gatherAnalogiesView()
         # cell.createAnalogies(molecule)
         # Systems Brah aka tissue
+        tissue = Tissue(cellNetwork)
+        tissue.feedback()
 
 
 
@@ -53,4 +47,4 @@ if __name__ == '__main__':
     label = 'predict'
     #imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
     #imgPath = 'testing/self.jpg'
-    prediction = graphInput(label, 'images/images/happy.png')
+    prediction = graphInput(label, '/testing/self.jpg')
