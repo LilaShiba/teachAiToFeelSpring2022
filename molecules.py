@@ -1,12 +1,13 @@
 # Heuristic Approach
 import os 
 import cv2
-import collections
-from collections import Counter
 import numpy as np 
+import collections
 import pandas as pd
 import seaborn as sns
+from collections import Counter
 import matplotlib.pyplot as plt
+
 
 emotionVibes = {
                 'fear':0,
