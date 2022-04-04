@@ -8,7 +8,7 @@ import numpy as np
 
 class Atom:
 
-    def __init__(self,label,imgPath, faceOverlap):
+    def __init__(self,label,imgPath,iteration,faceOverlap):
 
         #empty bois
         self.x = None
@@ -21,6 +21,7 @@ class Atom:
         self.rightEyeArray = []
         self.cords = ()
         #lil process
+        self.iteration = iteration
         self.threshold = faceOverlap
         self.label = label
         self.imgPath = imgPath 
@@ -74,7 +75,7 @@ class Atom:
         count = 0
         # if both eyes found
         if len(self.rightEyeImg) > 1 and len(self.leftEyeImg) > 1:
-            delta = 'prediction_'+str(count)
+            delta = 'prediction_'+str(self.iteration)
             os.makedirs(delta)
             cv2.imwrite(delta+'/LeftEye.png', self.leftEyeImg)
             cv2.imwrite(delta+'/RightEye.png', self.rightEyeImg)

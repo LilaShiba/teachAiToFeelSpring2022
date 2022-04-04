@@ -28,12 +28,12 @@ class Tissue:
 
         newBelief = collections.defaultdict(int)
         feelingSpectrum = nlargest(2, self.workingMemory, key = self.workingMemory.get)
-       
+
         self.f1 = feelingSpectrum[0]
         self.f1Value = self.workingMemory.get(self.f1)  
         self.f2 = feelingSpectrum[1]
         self.f2Value = self.workingMemory.get(self.f2)   
-
+        self.feelingPercent = self.f1Value + self.f2Value
         print('Feeling Polarity:')
         print('main feeling:')
         print(self.f1,'accounts for ', self.f1Value)
@@ -42,13 +42,6 @@ class Tissue:
         print('these two feeling make up', self.f1Value + self.f2Value)
 
 
-    def processFeedback(self):
-        pass
-        # if 70% >main vote >=40%:
-            # lower k in knn -> nearest neighbors should be majority of feeling
-        
-        # if main vote < 40%:
-            # rasie k in knn -> more context is needed for situation
         
 
 

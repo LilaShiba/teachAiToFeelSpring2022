@@ -1,3 +1,4 @@
+import collections
 import os
 import cv2 
 from PIL import Image
@@ -10,13 +11,18 @@ import matplotlib.pyplot as plt
 
 class graphInput():
     
-    def __init__(self,label,imgPath,iteration):
+    def __init__(self,label,imgPath,iteration,feedback):
+        self.feedback = feedback
         self.label = label 
         self.imgPath = imgPath
         self.iteration =  iteration
+        faceOverlap = feedback['faceOverlap']
+        dprThreshold = feedback['dprThreshold']
+        knnDepth = feedback['knnDepth']
+    
         # Process Face Data (DPR)
         # on init,  will run
-        atom = Atom(label, imgPath, faceOverlap=4) 
+        atom = Atom(label, imgPath,iteration,faceOverlap=4) 
         atom.createMolecule(label)
 
         molecule = Molecule(label, atom.moleculeImgPath, dprThreshold=100)
@@ -34,7 +40,17 @@ class graphInput():
         # Systems Brah aka tissue
         tissue = Tissue(cellNetwork)
         tissue.getFeedback()
-        return tissue.processFeedback()
+
+    def processFeedback(self):
+        lvl = self.tissue.feelingPercent
+        if 70 > lvl  >=40:
+            #lower k in knn -> nearest neighbors should be majority of feeling
+            self.feedback['knnDepth'] -= 1 
+        
+        if lvl < 40:
+            self.feedback['knnDepth'] += 1 
+            #rasie k in knn -> more context is needed for situation
+         
         
 
 
@@ -42,9 +58,10 @@ class graphInput():
 if __name__ == '__main__':
     label = 'predict'
     iteration = 0
-    feedBack = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/39843011-angry-face-man.webp',iteration)
+    # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
-
-    # while iteration < 3:
-    #     prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/39843011-angry-face-man.webp',iteration)
-    #     iteration+=1
+    feedback = {'faceOverlap':4, 'dprThreshold':100, 'knnDepth':8}
+    while iteration < 3:
+        prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/39843011-angry-face-man.webp',iteration,feedback)
+        feedback = prediction.feedback
+        iteration+=1
