@@ -25,12 +25,13 @@ class graphInput():
         atom = Atom(label, imgPath,iteration,faceOverlap=4) 
         atom.createMolecule(label)
 
-        molecule = Molecule(label, atom.moleculeImgPath, dprThreshold=100)
+        molecule = Molecule(label, atom.moleculeImgPath, dprThreshold)
         print('x:',  molecule.x)
         print('y:',  molecule.y)
         # knn graph where 
         # xAxis=dprRightEye, yAxis=dprLeftEye , hue=label
         molecule.train()
+        
         # cool stuff > molecule.showMap(), print(molecule.knnMap)
         # Analogus Reasoning
         cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions, knnDepth=7)
@@ -40,16 +41,24 @@ class graphInput():
         # Systems Brah aka tissue
         tissue = Tissue(cellNetwork)
         tissue.getFeedback()
+        self.atom = atom 
+        self.molecule = molecule 
+        self.cells = cellNetwork
+        self.tissue = tissue
 
     def processFeedback(self):
         lvl = self.tissue.feelingPercent
-        if 70 > lvl  >=40:
+        print('lvl:',lvl)
+        if lvl >=40 and lvl < 85:
             #lower k in knn -> nearest neighbors should be majority of feeling
-            self.feedback['knnDepth'] -= 1 
+            self.feedback['knnDepth'] -= 2
+            #self.feedback['dprThreshold'] += 25
+            return self.feedback
         
         if lvl < 40:
-            self.feedback['knnDepth'] += 1 
+            self.feedback['dprThreshold'] += 25
             #rasie k in knn -> more context is needed for situation
+            return self.feedback
          
         
 
@@ -60,8 +69,9 @@ if __name__ == '__main__':
     iteration = 0
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
-    feedback = {'faceOverlap':4, 'dprThreshold':100, 'knnDepth':8}
+    feedback = {'faceOverlap':4, 'dprThreshold':50, 'knnDepth':8}
     while iteration < 3:
-        prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/39843011-angry-face-man.webp',iteration,feedback)
-        feedback = prediction.feedback
+        print('feedback:', feedback)
+        prediction = graphInput(label, 'images/selfTest.jpg',iteration,feedback)
+        feedback = prediction.processFeedback()
         iteration+=1

@@ -34,12 +34,12 @@ class Tissue:
         self.f2 = feelingSpectrum[1]
         self.f2Value = self.workingMemory.get(self.f2)   
         self.feelingPercent = self.f1Value + self.f2Value
-        print('Feeling Polarity:')
-        print('main feeling:')
-        print(self.f1,'accounts for ', self.f1Value)
-        print('')
-        print(self.f2, 'accounts for ', self.f2Value)              
-        print('these two feeling make up', self.f1Value + self.f2Value)
+        # print('Feeling Polarity:')
+        # print('main feeling:')
+        # print(self.f1,'accounts for ', self.f1Value)
+        # print('')
+        # print(self.f2, 'accounts for ', self.f2Value)              
+        print(self.f1, 'and', self.f2, 'make up', self.f1Value + self.f2Value)
 
 
         
