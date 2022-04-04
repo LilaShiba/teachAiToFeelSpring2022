@@ -8,7 +8,8 @@ import numpy as np
 
 class Atom:
 
-    def __init__(self,label,imgPath):
+    def __init__(self,label,imgPath, faceOverlap):
+
         #empty bois
         self.x = None
         self.y = None 
@@ -20,6 +21,7 @@ class Atom:
         self.rightEyeArray = []
         self.cords = ()
         #lil process
+        self.threshold = faceOverlap
         self.label = label
         self.imgPath = imgPath 
         self.img = cv2.imread(imgPath)
@@ -51,8 +53,9 @@ class Atom:
             self.coords = coords
             self.processEyes()
             
-    def processEyes(self,k=4):
+    def processEyes(self):
         # cropped = img[start_row:end_row, start_col:end_col]
+        k = self.threshold
         img = self.img
         #crop_img = img[y:y+h, x:x+w]
         # We only want data with two eyes for basic training

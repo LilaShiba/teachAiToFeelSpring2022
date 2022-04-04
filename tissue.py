@@ -19,7 +19,7 @@ class Tissue:
 
 
 
-    def feedback(self):
+    def getFeedback(self):
         '''
         Atoms:     How we process   :  def processEyes(self, k=4):
         Molecules: Threshold of DPR :  def getDpr(self, threshold=75)
@@ -41,6 +41,14 @@ class Tissue:
         print(self.f2, 'accounts for ', self.f2Value)              
         print('these two feeling make up', self.f1Value + self.f2Value)
 
+
+    def processFeedback(self):
+        pass
+        # if 70% >main vote >=40%:
+            # lower k in knn -> nearest neighbors should be majority of feeling
+        
+        # if main vote < 40%:
+            # rasie k in knn -> more context is needed for situation
         
 
 

@@ -22,13 +22,14 @@ emotionVibes = {
 
 class Molecule:
 
-    def __init__(self,label,filePath):
+    def __init__(self,label,filePath, dprThreshold=100):
         self.label = label 
         self.filePath = filePath
         self.x = None
         self.y = None
         self.vibe = emotionVibes[label]
         self.graph = collections.defaultdict(list)
+        self.dprThreshold = dprThreshold
 
         
         if len(os.listdir(filePath)) > 1:
@@ -42,7 +43,8 @@ class Molecule:
             #self.rightArray = self.blurToGaus(self.rightEyeGrey)
             self.getDpr()
                    
-    def getDpr(self, threshold=75):
+    def getDpr(self):
+        threshold = self.dprThreshold
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
         # Left EYE

@@ -11,9 +11,10 @@ from typing import DefaultDict, OrderedDict
 
 
 class Cell:
-    def __init__(self,x,y,mapOfWorld):
+    def __init__(self,x,y,mapOfWorld, knnDepth):
         self.x = x
         self.y = y
+        self.knnDepth = knnDepth
         self.target = (x,y)
         self.mapOfWorld = mapOfWorld
         self.edges = None # pd.DataFrame()
@@ -24,7 +25,7 @@ class Cell:
         mOw['dist'] = mOw['cords'].apply(self.dist_heuristic)
         #mOw['x'], mOw['y'] = zip(*mOw["idx"])
         mOw = mOw.sort_values(by=['dist'], ascending=True)
-        self.edges = mOw[0:k]
+        self.edges = mOw[0:self.knnDepth]
 
 
     def dist_heuristic(self, cords):
@@ -51,8 +52,7 @@ class Cell:
             
         for key, item in self.workingMemory.items():
             self.workingMemory[key] = item / count
-        print('distro:')
-        print(self.workingMemory)
+      
 
             
 
