@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 class graphInput():
     
-    def __init__(self,label,imgPath,iteration):
+    def __init__(self,label,imgPath,iteration,feedback):
         self.feedback = feedback
         self.label = label 
         self.imgPath = imgPath
@@ -35,7 +35,7 @@ class graphInput():
         
         # cool stuff > molecule.showMap(), print(molecule.knnMap)
         # Analogus Reasoning
-        cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions, knnDepth=7)
+        cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions, knnDepth)
         cellNetwork.knn(knnDepth)
         # distro of feelings for working memory, e.g., result of cell.knn aggregated 
         cellNetwork.gatherAnalogiesView()
@@ -52,7 +52,7 @@ class graphInput():
         print('lvl:',lvl)
         
         # Heuristic -> Not filtering pixels correctly 
-        if lvl < 0.70:
+        if lvl < 0.70 and self.feedback['dprThreshold'] < 100:
             self.feedback['dprThreshold'] += 25
             #rasie k in knn -> more context is needed for situation
             return self.feedback
@@ -82,6 +82,6 @@ if __name__ == '__main__':
     shortTermMemory = []
     while iteration < 4:
         print('feedback:', feedback)
-        prediction = graphInput(label, 'images/images/angryTest.jpeg',iteration,feedback)
+        prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/casTest2.jpg',iteration,feedback)
         feedback = prediction.processFeedback()
         iteration+=1
