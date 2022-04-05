@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 class graphInput():
     
-    def __init__(self,label,imgPath,iteration,feedback):
+    def __init__(self,label,imgPath,iteration):
         self.feedback = feedback
         self.label = label 
         self.imgPath = imgPath
@@ -26,6 +26,7 @@ class graphInput():
         atom.createMolecule(label)
 
         molecule = Molecule(label, atom.moleculeImgPath, dprThreshold)
+        # TODO: Implement shortTermMemory x,y cords history
         print('x:',  molecule.x)
         print('y:',  molecule.y)
         # knn graph where 
@@ -35,7 +36,7 @@ class graphInput():
         # cool stuff > molecule.showMap(), print(molecule.knnMap)
         # Analogus Reasoning
         cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions, knnDepth=7)
-        cellNetwork.knn(5)
+        cellNetwork.knn(knnDepth)
         # distro of feelings for working memory, e.g., result of cell.knn aggregated 
         cellNetwork.gatherAnalogiesView()
         # Systems Brah aka tissue
@@ -49,16 +50,24 @@ class graphInput():
     def processFeedback(self):
         lvl = self.tissue.feelingPercent
         print('lvl:',lvl)
-        if lvl >=40 and lvl < 85:
-            #lower k in knn -> nearest neighbors should be majority of feeling
-            self.feedback['knnDepth'] -= 2
-            #self.feedback['dprThreshold'] += 25
-            return self.feedback
         
-        if lvl < 40:
+        # Heuristic -> Not filtering pixels correctly 
+        if lvl < 0.70:
             self.feedback['dprThreshold'] += 25
             #rasie k in knn -> more context is needed for situation
             return self.feedback
+        
+        # Heuristic -> Detecting Pixels, too much noise 
+        if self.feedback['dprThreshold'] >= 50:
+            if self.feedback['knnDepth'] > 2:
+                self.feedback['knnDepth'] -= 2
+            else:
+                self.feedback['faceOverlap'] -= 1
+            return self.feedback
+
+
+        
+
          
         
 
@@ -70,8 +79,9 @@ if __name__ == '__main__':
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
     feedback = {'faceOverlap':4, 'dprThreshold':50, 'knnDepth':8}
-    while iteration < 3:
+    shortTermMemory = []
+    while iteration < 4:
         print('feedback:', feedback)
-        prediction = graphInput(label, 'images/selfTest.jpg',iteration,feedback)
+        prediction = graphInput(label, 'images/images/angryTest.jpeg',iteration,feedback)
         feedback = prediction.processFeedback()
         iteration+=1
