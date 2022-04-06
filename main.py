@@ -22,30 +22,30 @@ class graphInput():
     
         # Process Face Data (DPR)
         # on init,  will run
-        atom = Atom(label, imgPath,iteration,faceOverlap=4) 
+        atom = Atom(label,imgPath,iteration,faceOverlap) 
         atom.createMolecule(label)
-
-        molecule = Molecule(label, atom.moleculeImgPath, dprThreshold)
-        # TODO: Implement shortTermMemory x,y cords history
-        print('x:',  molecule.x)
-        print('y:',  molecule.y)
-        # knn graph where 
-        # xAxis=dprRightEye, yAxis=dprLeftEye , hue=label
-        molecule.train()
-        
-        # cool stuff > molecule.showMap(), print(molecule.knnMap)
-        # Analogus Reasoning
-        cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions, knnDepth)
-        cellNetwork.knn(knnDepth)
-        # distro of feelings for working memory, e.g., result of cell.knn aggregated 
-        cellNetwork.gatherAnalogiesView()
-        # Systems Brah aka tissue
-        tissue = Tissue(cellNetwork)
-        tissue.getFeedback()
-        self.atom = atom 
-        self.molecule = molecule 
-        self.cells = cellNetwork
-        self.tissue = tissue
+        if len(atom.imgPath) > 1:
+            molecule = Molecule(label, atom.moleculeImgPath, dprThreshold)
+            # TODO: Implement shortTermMemory x,y cords history
+            print('x:',  molecule.x)
+            print('y:',  molecule.y)
+            # knn graph where 
+            # xAxis=dprRightEye, yAxis=dprLeftEye , hue=label
+            molecule.train()
+            
+            # cool stuff > molecule.showMap(), print(molecule.knnMap)
+            # Analogus Reasoning
+            cellNetwork = Cell(molecule.x, molecule.y, molecule.mapOfEmotions, knnDepth)
+            cellNetwork.knn(knnDepth)
+            # distro of feelings for working memory, e.g., result of cell.knn aggregated 
+            cellNetwork.gatherAnalogiesView()
+            # Systems Brah aka tissue
+            tissue = Tissue(cellNetwork)
+            tissue.getFeedback()
+            self.atom = atom 
+            self.molecule = molecule 
+            self.cells = cellNetwork
+            self.tissue = tissue
 
     def processFeedback(self):
         lvl = self.tissue.feelingPercent
@@ -78,10 +78,10 @@ if __name__ == '__main__':
     iteration = 0
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
-    feedback = {'faceOverlap':4, 'dprThreshold':50, 'knnDepth':8}
+    feedback = {'faceOverlap':4, 'dprThreshold':100, 'knnDepth':8}
     shortTermMemory = []
     while iteration < 4:
         print('feedback:', feedback)
-        prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/casTest2.jpg',iteration,feedback)
+        prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/angry/28015.jpg',iteration,feedback)
         feedback = prediction.processFeedback()
         iteration+=1

@@ -81,3 +81,5 @@ class Atom:
             cv2.imwrite(delta+'/RightEye.png', self.rightEyeImg)
             self.moleculeImgPath = delta
             count+=1
+        else:
+            print('picture quality does not suffice')
