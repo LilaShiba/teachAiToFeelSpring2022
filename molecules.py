@@ -22,7 +22,7 @@ emotionVibes = {
 
 class Molecule:
 
-    def __init__(self,label,filePath, dprThreshold=100):
+    def __init__(self,label,filePath, dprThreshold, delta):
         self.label = label 
         self.filePath = filePath
         self.x = None
@@ -30,6 +30,7 @@ class Molecule:
         self.vibe = emotionVibes[label]
         self.graph = collections.defaultdict(list)
         self.dprThreshold = dprThreshold
+        self.deltaPath = delta
 
         
         if len(os.listdir(filePath)) > 1:
@@ -42,28 +43,40 @@ class Molecule:
             #self.leftArray = self.blurToGaus(self.leftEyeGrey)
             #self.rightArray = self.blurToGaus(self.rightEyeGrey)
             self.getDpr()
+
+    def createFolder(self):
+        cv2.imwrite(self.deltaPath+'/leftEyeFilter.png',np.array(self.leftFilterImg))
+        cv2.imwrite(self.deltaPath+'/rightEyeFilter.png',np.array(self.rightFilterImg))
                    
     def getDpr(self):
         threshold = self.dprThreshold
         left  = self.leftArray.copy()
         right = self.rightArray.copy()
         # Left EYE
-        left[left < threshold] = 1
+        left[left <= threshold] = 1
         left[left > 1]  = 0
-        dpcLeft = np.count_nonzero(left) 
-        zero_countL = np.count_nonzero(left==0)#left[np.where(left == 0)]
-        self.dprLeftEye = (dpcLeft / (zero_countL+dpcLeft) )
+        
+        lpcL = np.count_nonzero(left==1) 
+        dpcL = np.count_nonzero(left==0)#left[np.where(left == 0)]
+        self.dprLeftEye = (lpcL / (lpcL+dpcL) )
+        left[ left > 0] = 255
+        self.leftFilterImg = left
         
         # RIGHT EYE
-        right[right < threshold] = 1
+        right[right <= threshold] = 1
         right[right > 1]  = 0
-        zero_countR = np.count_nonzero(right==0)#right[np.where(right == 0)]
-        dpcRight = np.count_nonzero(right) 
-        self.dprRightEye = (dpcRight / (dpcRight + zero_countR) )
-        
+        dpcR = np.count_nonzero(right==1)
+        lpcR = np.count_nonzero(right==0) 
+       
+
+        self.dprRightEye = (dpcR / (dpcR + lpcR) )
+        right[ right > 0] = 255
+        self.rightFilterImg = right
         self.x = self.dprLeftEye#abs(zero_countL-zero_countR) #self.dprRightEye#self.dprRightEye
         self.y = self.dprRightEye#abs(self.dprRightEye-self.dprLeftEye)#self.dprLeftEye#zero_countR #self.dprLeftEye
-        self.z = abs(dpcLeft-dpcRight)#round(self.dprRightEye,2)#abs(dpcLeft-dpcRight)
+        #self.z = abs(dpcLeft-dpcRight)#round(self.dprRightEye,2)#abs(dpcLeft-dpcRight)
+        self.createFolder()
+
 
     def blurToGaus(self, imgToBlur, kernal=(0,0)):
         # resource: https://docs.opencv.org/3.4/d4/d13/tutorial_py_filtering.html
@@ -106,7 +119,7 @@ class Molecule:
                 #     continue
                 deltaPath = 'eyeData/'+label+'/'+imgFolder
                 #if len(deltaPath) >= 5:
-                delta = Molecule(label, deltaPath)
+                delta = Molecule(label, deltaPath,self.dprThreshold,self.deltaPath)
                     # both eyes y'all
                 if delta.x and delta.y:
                     x = round(delta.x,k)

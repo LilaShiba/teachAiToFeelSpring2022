@@ -30,9 +30,15 @@ class Tissue:
         feelingSpectrum = nlargest(2, self.workingMemory, key = self.workingMemory.get)
 
         self.f1 = feelingSpectrum[0]
-        self.f1Value = self.workingMemory.get(self.f1)  
-        self.f2 = feelingSpectrum[1]
-        self.f2Value = self.workingMemory.get(self.f2)   
+        self.f1Value = self.workingMemory.get(self.f1) 
+        if len(feelingSpectrum)>1: 
+            self.f2 = feelingSpectrum[1]
+            self.f2Value = self.workingMemory.get(self.f2)  
+        else:
+            self.f2 = 0
+            self.f2Value = 0
+
+
         self.feelingPercent = self.f1Value + self.f2Value
         # print('Feeling Polarity:')
         # print('main feeling:')

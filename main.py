@@ -9,6 +9,7 @@ from molecules import Molecule
 import matplotlib.pyplot as plt
 
 
+
 class graphInput():
     
     def __init__(self,label,imgPath,iteration,feedback):
@@ -16,6 +17,7 @@ class graphInput():
         self.label = label 
         self.imgPath = imgPath
         self.iteration =  iteration
+
         faceOverlap = feedback['faceOverlap']
         dprThreshold = feedback['dprThreshold']
         knnDepth = feedback['knnDepth']
@@ -25,7 +27,7 @@ class graphInput():
         atom = Atom(label,imgPath,iteration,faceOverlap) 
         atom.createMolecule(label)
         if len(atom.imgPath) > 1:
-            molecule = Molecule(label, atom.moleculeImgPath, dprThreshold)
+            molecule = Molecule(label, atom.moleculeImgPath,dprThreshold,atom.delta)
             # TODO: Implement shortTermMemory x,y cords history
             print('x:',  molecule.x)
             print('y:',  molecule.y)
@@ -52,18 +54,19 @@ class graphInput():
         print('lvl:',lvl)
         
         # Heuristic -> Not filtering pixels correctly 
-        if lvl < 0.70 and self.feedback['dprThreshold'] < 100:
-            self.feedback['dprThreshold'] += 25
-            #rasie k in knn -> more context is needed for situation
-            return self.feedback
+        # if lvl < 0.70 and self.feedback['dprThreshold'] < 100:
+        #     self.feedback['dprThreshold'] += 25
+        #     #rasie k in knn -> more context is needed for situation
+        #     return self.feedback
         
         # Heuristic -> Detecting Pixels, too much noise 
         if self.feedback['dprThreshold'] >= 50:
             if self.feedback['knnDepth'] > 2:
                 self.feedback['knnDepth'] -= 2
             else:
-                self.feedback['faceOverlap'] -= 1
+                self.feedback['dprThreshold'] += 25
             return self.feedback
+        return self.feedback
 
 
         
@@ -78,7 +81,7 @@ if __name__ == '__main__':
     iteration = 0
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
-    feedback = {'faceOverlap':4, 'dprThreshold':100, 'knnDepth':8}
+    feedback = {'faceOverlap':4, 'dprThreshold':100, 'knnDepth':7}
     shortTermMemory = []
     while iteration < 4:
         print('feedback:', feedback)

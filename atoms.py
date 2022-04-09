@@ -83,3 +83,5 @@ class Atom:
             count+=1
         else:
             print('picture quality does not suffice')
+        
+        self.delta = delta
