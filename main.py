@@ -53,6 +53,7 @@ class graphInput():
         lvl = self.tissue.feelingPercent
         print('lvl:',lvl)
         
+        
         # Heuristic -> Not filtering pixels correctly 
         # if lvl < 0.70 and self.feedback['dprThreshold'] < 100:
         #     self.feedback['dprThreshold'] += 25
@@ -60,12 +61,15 @@ class graphInput():
         #     return self.feedback
         
         # Heuristic -> Detecting Pixels, too much noise 
-        if self.feedback['dprThreshold'] >= 50:
+        if self.feedback['dprThreshold'] >= 50 and lvl < 0.70:
             if self.feedback['knnDepth'] > 2:
                 self.feedback['knnDepth'] -= 2
             else:
                 self.feedback['dprThreshold'] += 25
             return self.feedback
+        elif lvl > 0.70:
+            self.feedback['knnDepth'] += 3
+
         return self.feedback
 
 
@@ -85,6 +89,12 @@ if __name__ == '__main__':
     shortTermMemory = []
     while iteration < 4:
         print('feedback:', feedback)
-        prediction = graphInput(label, '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/angry/28015.jpg',iteration,feedback)
+        prediction = graphInput(label, '/Users/kylejames/Desktop/teachAiToFeelSpring2022-main/happy1.jpeg',iteration,feedback)
         feedback = prediction.processFeedback()
         iteration+=1
+
+
+
+
+#{"apiCoverageThreshold":90,"apiSuccessThreshold":90,"componentCoverageThreshold":90,"componentSuccessThreshold":90,"successRateApi":"","successRateComponent":"","testCoverageApi":"","testCoverageComponent":""}
+{"id":"6090489f7ccf430318a7457e","scope":"workspace","date":"2022-04-11","aggregationType":"testCoverage"}
