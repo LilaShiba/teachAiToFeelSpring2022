@@ -45,8 +45,11 @@ class Molecule:
             self.getDpr()
 
     def createFolder(self):
-        cv2.imwrite(self.deltaPath+'/leftEyeFilter.png',np.array(self.leftFilterImg))
-        cv2.imwrite(self.deltaPath+'/rightEyeFilter.png',np.array(self.rightFilterImg))
+        lEye = np.array(self.leftFilterImg)
+        rEye = np.array(self.rightFilterImg)
+        cv2.imwrite(self.deltaPath+'/leftEyeFilter.png',lEye)
+        cv2.imwrite(self.deltaPath+'/rightEyeFilter.png',rEye)
+        
                    
     def getDpr(self):
         threshold = self.dprThreshold
@@ -75,7 +78,8 @@ class Molecule:
         self.x = self.dprLeftEye#abs(zero_countL-zero_countR) #self.dprRightEye#self.dprRightEye
         self.y = self.dprRightEye#abs(self.dprRightEye-self.dprLeftEye)#self.dprLeftEye#zero_countR #self.dprLeftEye
         #self.z = abs(dpcLeft-dpcRight)#round(self.dprRightEye,2)#abs(dpcLeft-dpcRight)
-        self.createFolder()
+        if self.label == 'predict':
+            self.createFolder()
 
 
     def blurToGaus(self, imgToBlur, kernal=(0,0)):
