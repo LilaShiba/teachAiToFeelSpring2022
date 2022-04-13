@@ -9,7 +9,7 @@ from molecules import Molecule
 import matplotlib.pyplot as plt
 
 
-
+thoughtProcess = collections.defaultdict()
 class graphInput():
     
     def __init__(self,label,imgPath,iteration,feedback):
@@ -58,19 +58,29 @@ class graphInput():
         # if lvl < 0.70 and self.feedback['dprThreshold'] < 100:
         #     self.feedback['dprThreshold'] += 25
         #     #rasie k in knn -> more context is needed for situation
+        if lvl >= .80:
+            return 0
         #     return self.feedback
         
-        # Heuristic -> Detecting Pixels, too much noise 
-        if self.feedback['dprThreshold'] >= 50 and lvl < 0.70:
-            if self.feedback['knnDepth'] > 2:
-                self.feedback['knnDepth'] -= 2
-            else:
-                self.feedback['dprThreshold'] += 25
+        if lvl < .70 and self.feedback['faceOverlap'] < 4:
+            self.feedback['faceOverlap'] += 1
             return self.feedback
-        elif lvl > 0.70:
+
+        
+        # Heuristic -> Detecting Pixels, too much noise 
+        if lvl < 0.80:
+            if self.feedback['knnDepth'] > 3:
+                self.feedback['knnDepth'] -= 2
+            if self.feedback['dprThreshold']< 125:
+                self.feedback['dprThreshold'] += 25
+            
+        elif lvl < 0.60:
             self.feedback['knnDepth'] += 3
 
+        thoughtProcess[self.iteration] = self.feedback
         return self.feedback
+
+
 
 
         
@@ -85,16 +95,17 @@ if __name__ == '__main__':
     iteration = 0
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
-    feedback = {'faceOverlap':4, 'dprThreshold':100, 'knnDepth':7}
+    feedback = {'faceOverlap':1, 'dprThreshold':10, 'knnDepth':7}
     shortTermMemory = []
     while iteration < 4:
         print('feedback:', feedback)
-        prediction = graphInput(label, '/Users/kylejames/Desktop/teachAiToFeelSpring2022-main/happy1.jpeg',iteration,feedback)
+        prediction = graphInput(label, '/Users/kylejames/Desktop/teachAiToFeelSpring2022-main/angerTest.jpeg',iteration,feedback)
         feedback = prediction.processFeedback()
+        if feedback == 0:
+            break
         iteration+=1
+    print(thoughtProcess)
 
 
 
 
-#{"apiCoverageThreshold":90,"apiSuccessThreshold":90,"componentCoverageThreshold":90,"componentSuccessThreshold":90,"successRateApi":"","successRateComponent":"","testCoverageApi":"","testCoverageComponent":""}
-{"id":"6090489f7ccf430318a7457e","scope":"workspace","date":"2022-04-11","aggregationType":"testCoverage"}
