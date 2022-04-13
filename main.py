@@ -93,19 +93,17 @@ class graphInput():
 if __name__ == '__main__':
     label = 'predict'
     iteration = 0
+    imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/images/happy.png'
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
     feedback = {'faceOverlap':1, 'dprThreshold':10, 'knnDepth':7}
     shortTermMemory = []
     while iteration < 4:
         print('feedback:', feedback)
-        prediction = graphInput(label, '/Users/kylejames/Desktop/teachAiToFeelSpring2022-main/angerTest.jpeg',iteration,feedback)
+        prediction = graphInput(label, imgPath,iteration,feedback)
         feedback = prediction.processFeedback()
         if feedback == 0:
             break
         iteration+=1
     print(thoughtProcess)
-
-
-
 

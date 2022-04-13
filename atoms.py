@@ -74,8 +74,9 @@ class Atom:
         #if (atomOne.rightEyeArray) > 0 and len(atomOne.rightEyeArray) > 0:
         count = 0
         # if both eyes found
+        delta = 'prediction_'+str(self.iteration)
         if len(self.rightEyeImg) > 1 and len(self.leftEyeImg) > 1:
-            delta = 'prediction_'+str(self.iteration)
+           
             os.makedirs(delta)
             cv2.imwrite(delta+'/LeftEye.png', self.leftEyeImg)
             cv2.imwrite(delta+'/RightEye.png', self.rightEyeImg)
