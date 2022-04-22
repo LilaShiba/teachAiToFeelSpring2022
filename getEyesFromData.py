@@ -39,9 +39,10 @@ class Filter:
         '''
         
 
-        self.path = self.imgPath
-        self.img  = cv2.imread(imgPath)
-        self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        self.path = imgPath
+        self.gray  = cv2.imread(imgPath)
+        #self.img  = cv2.imread(imgPath)
+        #self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         detector  = dlib.get_frontal_face_detector()
         self.rects = detector(self.gray,1)
 
@@ -133,21 +134,21 @@ class Filter:
 
 
 if __name__ == '__main__':
-    dataSet = 'input file path to home directory'
-    deltaDataSet = collections.defaultdict(dict())
+    dataSet = 'dataSetOne'
+    deltaDataSet = collections.defaultdict(list)
     ds = Filter(dataSet)
 
     for label in os.listdir(dataSet):
+        print(label)
         iteration = 0
         # per each label    
-        for imgPath in os.listdir(label):
+        for imgPath in os.listdir(dataSet+'/'+label):
             # per each image
             delta = label+'/'+imgPath
             ds.filterSubRoutine(delta)
             ds.getDpr()
             ds.createFolder(delta, iteration)
             iteration += 1
-
 
 
 

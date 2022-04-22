@@ -100,7 +100,7 @@ class Molecule:
     def useScore(self):
         return self.z  
 
-    def train(self, k=2):
+    def train(self,memoryPath='eyeData', k=2):
     
         colors = {
                 0:'teal',
@@ -117,11 +117,11 @@ class Molecule:
         #cords = collections.defaultdict(list)
         knnMap = collections.defaultdict(list)
         
-        for label in os.listdir('eyeData'):    
-            for imgFolder in os.listdir('eyeData/'+label):
+        for label in os.listdir(memoryPath):    
+            for imgFolder in os.listdir(memoryPath+label):
                 # if imgFolder in ['neutral']:
                 #     continue
-                deltaPath = 'eyeData/'+label+'/'+imgFolder
+                deltaPath = memoryPath+label+'/'+imgFolder
                 #if len(deltaPath) >= 5:
                 delta = Molecule(label, deltaPath,self.dprThreshold,self.deltaPath)
                     # both eyes y'all
@@ -149,6 +149,8 @@ class Molecule:
         for idx,row in res.iterrows():
             #if len(row['emotion']) >= 3:
             vote = Counter(row['emotion'])
+            #TODO make dynamic
+            # change .50 for vote can make dynamic
             if vote.most_common(1)[0][1] / len(row['emotion']) > .50:
                 row['emotion'] = vote.most_common(1)[0][0]
                 mapOfEmotions = mapOfEmotions.append(row)
@@ -165,6 +167,4 @@ class Molecule:
         plt.plot(self.x, self.y, marker="o", markersize=15, color="red")
         plt.legend()
         plt.show()
-
-    def predict(self):
-        pass
+        # TODO add results to iteration folder!

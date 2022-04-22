@@ -1,3 +1,5 @@
+
+
 import collections
 import os
 import cv2 
@@ -93,14 +95,14 @@ class graphInput():
 if __name__ == '__main__':
     label = 'predict'
     iteration = 0
-    imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/validation/happy/192.jpg'
+    imgPath = '/Users/kjams/Desktop/dataAnalysis2022Spring/images/selfTest.jpg'
     # TODO: create folder to hold each iteration's mental map to look for somekind of intelligence
 
-    feedback = {'faceOverlap':1, 'dprThreshold':10, 'knnDepth':7}
-    shortTermMemory = []
-    while iteration < 4:
+    feedback = {'faceOverlap':2, 'dprThreshold':10, 'knnDepth':7}
+  
+    while iteration < 5:
         print('feedback:', feedback)
-        prediction = graphInput(label, imgPath,iteration,feedback)
+        prediction = graphInput(label,imgPath,iteration,feedback)
         feedback = prediction.processFeedback()
         if feedback == 0:
             break

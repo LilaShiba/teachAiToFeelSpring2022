@@ -48,7 +48,7 @@ class Tissue:
         print(self.f1, 'and', self.f2, 'make up', self.f1Value + self.f2Value)
 
 
-        
+        # Briefly illustrate problem finding, problem forming, and problem solving in your VERA projects in this class. 
 
 
         # Heuristic Approach 
