@@ -17,8 +17,6 @@
 
 <img src="https://s3.ap-south-1.amazonaws.com/s3.studytonight.com/curious/uploads/pictures/1592469192-74364.png" width="100" height="100">
 
-# How To Use
+# How It Works
 
-- Atoms: are the first lvl of abstraction. As such, this is where images are processed.
-- Molecules: are two Atoms placed together, right eye and left eye. This is where DPR is found and graphed
-- Cells: are K nearest Molecules. This is where case based reasoning takes place. 
+Please read the [paper here](https://github.com/kyle1james/teachAiToFeelSpring2022/blob/main/paper.pdf). 
