@@ -118,10 +118,10 @@ class Molecule:
         knnMap = collections.defaultdict(list)
         
         for label in os.listdir(memoryPath):    
-            for imgFolder in os.listdir(memoryPath+label):
+            for imgFolder in os.listdir(memoryPath+'/'+label):
                 # if imgFolder in ['neutral']:
                 #     continue
-                deltaPath = memoryPath+label+'/'+imgFolder
+                deltaPath = memoryPath+'/'+label+'/'+imgFolder
                 #if len(deltaPath) >= 5:
                 delta = Molecule(label, deltaPath,self.dprThreshold,self.deltaPath)
                     # both eyes y'all
