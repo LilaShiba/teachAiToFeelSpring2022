@@ -19,4 +19,8 @@
 
 # How It Works
 
+<<<<<<< HEAD
 <img src='https://github.com/kyle1james/teachAiToFeelSpring2022/blob/streamProcess/lvls.png'>
+=======
+Please read the [paper here](https://github.com/kyle1james/teachAiToFeelSpring2022/blob/main/paper.pdf). 
+>>>>>>> 1a12b7ac7905e041b8a0d021f817b8fa257a18ac
